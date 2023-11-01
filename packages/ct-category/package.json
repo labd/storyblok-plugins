@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && npx @storyblok/field-plugin-cli@beta deploy --dotEnvPath '../../.env'"
+    "deploy": "@storyblok/field-plugin-cli@beta deploy --dotEnvPath '../../.env'"
   },
   "dependencies": {
     "@commercetools/platform-sdk": "^6.0.0",
