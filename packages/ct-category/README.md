@@ -1,12 +1,22 @@
-# Storyblok Field Plugin in React
+# Commercetools Category Field Plugin
 
-This React project is designed to function as a Storyblok field plugin application. It showcases some fundamental features for field plugins, including value updates, modal toggling, and asset selection. The primary goal of this starter is to provide developers with a clear blueprint for creating custom field plugins.
+This plugin provides a field for selecting a category from a commercetools project.
+To make this work you need to fill in 3 CT options:
 
-To remove the example code, simply delete the `src/components/` directory and alter the imports and returned `JSX` in `src/App.tsx`.
+- projectKey: The commercetools project key
+- clientId: A commercetools API client id
+- clientSecret: A commercetools API client secret
 
-For those who prefer to work with JavaScript instead of TypeScript, they can rename src/App.tsx to src/App.jsx.
+The clientId and clientSecret should be for a token that has at least a category read scope.
 
-## Usage
+## Preview
+
+<div style="display:flex;gap:1rem;align-items:flex-start">
+<img src="preview.png" class="flex:1" width="400" height="auto">
+<img src="preview-2.png" class="flex:1" width="400" height="auto">
+</div>
+
+## Development
 
 For development, run the application locally with
 
@@ -15,6 +25,8 @@ npm run dev
 ```
 
 and open the [Sandbox](https://plugin-sandbox.storyblok.com/field-plugin/).
+
+## Deployment
 
 To build the project, run
 
@@ -27,19 +39,3 @@ Deploy the field plugin with the CLI. Issue a [personal access token](https://ap
 ```shell
 npm run deploy
 ```
-
-## Next Steps
-
-Read more about field plugins [on GitHub](https://github.com/storyblok/field-plugin).
-
-Set up continuous integration with the [CLI](https://www.npmjs.com/package/@storyblok/field-plugin-cli). Define an environmental variable `STORYBLOK_PERSONAL_ACCESS_TOKEN`, and use the `--name` and `--skipPrompts` options as such:
-
-```shell
-npm run deploy --name $NAME --skipPrompts
-```
-
-[@storyblok/mui](https://www.npmjs.com/package/@storyblok/mui) contains a component library and theme for [MUI](https://mui.com/). To add it to this project, follow the instructions in the [readme](https://github.com/storyblok/mui).
-
-## Clean up the boilerplate
-
-To start from a blank state, remove the example component `<FieldPluginExample />` from `src/App.tsx` with `<FieldPlugin />`.

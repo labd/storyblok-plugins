@@ -1,0 +1,103 @@
+.container {
+  font-size: 14px;
+}
+.display {
+  box-sizing: border-box;
+  text-align: left;
+  width: 100%;
+  color: var(--sb_dark_blue);
+  border-radius: 0.5rem;
+  transition: border 0.1s ease-in-out;
+  background-color: white;
+
+  border: 1px solid var(--light);
+
+  padding: 13.5px 17px;
+  padding-right: 2.5rem;
+  min-height: 50px;
+  cursor: text;
+
+  position: relative;
+  outline: none;
+}
+.display:hover,
+.display:focus {
+  border-color: var(--sb_green);
+}
+.display:focus {
+  box-shadow: 0 0 0 3px var(--sb_green_25);
+}
+.display .chevron {
+  position: absolute;
+  right: 0;
+  margin: 1rem;
+  top: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.select {
+  background-color: white;
+  border: 1px solid var(--light);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  position: relative;
+}
+.select:hover {
+  border-color: var(--sb_green);
+}
+.select input {
+  box-sizing: border-box;
+  width: 100%;
+  color: #1b243f;
+  border-radius: 8px;
+  transition: border 0.1s ease-in-out;
+  background-color: white;
+
+  border: 1px solid var(--light);
+
+  padding: 13.5px 17px;
+
+  padding-left: 2.5rem;
+
+  position: relative;
+}
+.select input:focus {
+  border-radius: 8px;
+  border-color: var(--sb_green);
+  box-shadow: 0 0 0 3px var(--sb_green_25);
+  outline: none;
+}
+.select svg {
+  position: absolute;
+  left: 0;
+  margin: 1.25rem;
+  top: 0;
+  z-index: 1;
+  color: #b1b5be;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.options {
+  max-height: 20rem;
+  overflow-y: auto;
+  width: 100%;
+  background-color: white;
+  margin-top: 0.75rem;
+}
+.options button {
+  border: none;
+  padding: 0.5rem 0;
+  background-color: transparent;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 0.5rem;
+}
+.options button:hover {
+  background-color: var(--light_50);
+}
+.options button.focus {
+  background-color: var(--light);
+}
