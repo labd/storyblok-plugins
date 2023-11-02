@@ -18,10 +18,16 @@ The clientId and clientSecret should be for a token that has at least a category
 
 ## Development
 
-For development, run the application locally with
+Install dependencies
 
 ```shell
-npm run dev
+pnpm install
+```
+
+Run the application locally with
+
+```shell
+pnpm dev
 ```
 
 and open the [Sandbox](https://plugin-sandbox.storyblok.com/field-plugin/).
