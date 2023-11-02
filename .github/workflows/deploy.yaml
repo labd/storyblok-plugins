@@ -52,4 +52,4 @@ jobs:
 
       - name: Deploy
         working-directory: packages/ct-category
-        run: npx @storyblok/field-plugin-cli deploy
+        run: npx @storyblok/field-plugin-cli deploy --scope partner-portal --name ct-category

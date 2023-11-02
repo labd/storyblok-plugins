@@ -12,8 +12,8 @@ The clientId and clientSecret should be for a token that has at least a category
 ## Preview
 
 <div style="display:flex;gap:1rem;align-items:flex-start">
-<img src="images/preview.png" class="flex:1" width="400" height="auto">
-<img src="images/preview-2.png" class="flex:1" width="400" height="auto">
+  <img src="images/preview.png" class="flex:1" width="400" height="auto">
+  <img src="images/preview-2.png" class="flex:1" width="400" height="auto">
 </div>
 
 ## Development
@@ -25,6 +25,8 @@ npm run dev
 ```
 
 and open the [Sandbox](https://plugin-sandbox.storyblok.com/field-plugin/).
+
+Then fill in the 3 options as described above.
 
 ## Deployment
 
