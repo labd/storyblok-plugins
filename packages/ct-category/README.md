@@ -28,14 +28,4 @@ and open the [Sandbox](https://plugin-sandbox.storyblok.com/field-plugin/).
 
 ## Deployment
 
-To build the project, run
-
-```shell
-npm run build
-```
-
-Deploy the field plugin with the CLI. Issue a [personal access token](https://app.storyblok.com/#/me/account?tab=token), rename `.env.local.example` to `.env.example`, open the file, set the value `STORYBLOK_PERSONAL_ACCESS_TOKEN`, and run
-
-```shell
-npm run deploy
-```
+To deploy, simply push to main.
