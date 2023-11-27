@@ -35,7 +35,7 @@ export const searchCategories = ({
   token,
   projectKey,
 }: SearchProps) =>
-  fetch(`${baseUri}/${projectKey}/categories?limit=100`, {
+  fetch(`${baseUri}/${projectKey}/categories?limit=500`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
