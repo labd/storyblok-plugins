@@ -1,5 +1,5 @@
 {
-  "name": "ct-category",
+  "name": "@labdigital/storyblok-commercetools-plugin",
   "private": true,
   "version": "0.0.0",
   "type": "module",
