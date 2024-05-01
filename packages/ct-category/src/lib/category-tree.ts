@@ -92,7 +92,7 @@ export const getCategoryPath = (
   id: string,
   path: CategoryNode[] = [],
 ): CategoryNode[] => {
-  if (categoryNode.id === id) {
+  if (categoryNode.key === id || categoryNode.id === id) {
     return path
   }
   const childrenPath = categoryNode.children

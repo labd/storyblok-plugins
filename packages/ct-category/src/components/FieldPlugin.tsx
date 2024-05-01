@@ -14,12 +14,11 @@ export function FieldPlugin() {
   const categoryTree = useCategoryTree()
   const [search, setSearch] = useState('')
 
+  const content = plugin.data.content as { key?: string; id: string }
+
   const selectedCategoryPath =
     plugin.data.content && categoryTree
-      ? getCategoryPath(
-          categoryTree,
-          (plugin.data.content as { id: string }).id,
-        )
+      ? getCategoryPath(categoryTree, content.key ?? content.id)
       : undefined
 
   const categoryNodes = categoryTree
