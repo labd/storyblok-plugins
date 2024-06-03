@@ -8,7 +8,7 @@ type Props<T extends object> = {
   displayValue: ReactNode
   search: string
   onSearch: (search: string) => void
-  onSelect: (item: T) => void
+  onSelect: (item: T | null) => void
   renderOption: (item: T) => ReactNode
 }
 
@@ -25,7 +25,7 @@ export function SearchField<T extends object>({
   const buttonRef = useRef<HTMLButtonElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
 
-  const select = () => onSelect(items[focusIndex])
+  const select = () => onSelect(focusIndex ? items[focusIndex - 1] : null)
 
   const close = () => {
     setOpen(false)
@@ -106,6 +106,17 @@ export function SearchField<T extends object>({
               className="options"
               ref={listRef}
             >
+              <li>
+                <button
+                  onClick={() => {
+                    onSelect(null)
+                    close()
+                  }}
+                  className={focusIndex === 0 ? 'focus' : ''}
+                >
+                  <span className={`level-1`}>-- None --</span>
+                </button>
+              </li>
               {items.map((node, i) => (
                 <li key={JSON.stringify(node)}>
                   <button
@@ -113,7 +124,7 @@ export function SearchField<T extends object>({
                       onSelect(node)
                       close()
                     }}
-                    className={focusIndex === i ? 'focus' : ''}
+                    className={focusIndex === i + 1 ? 'focus' : ''}
                   >
                     {renderOption(node)}
                   </button>

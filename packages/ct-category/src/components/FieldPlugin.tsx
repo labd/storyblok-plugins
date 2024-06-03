@@ -32,10 +32,14 @@ export function FieldPlugin() {
       displayValue={selectedCategoryPath?.map((node) => node.name).join(' › ')}
       items={categoryNodes ?? []}
       onSelect={(category) =>
-        plugin.actions.setContent({
-          id: category.id,
-          key: category.key,
-        })
+        plugin.actions.setContent(
+          category
+            ? {
+                id: category.id,
+                key: category.key,
+              }
+            : null,
+        )
       }
       renderOption={(node) => (
         <span className={`level-${node.level}`}>{node.name}</span>
