@@ -11,7 +11,9 @@ export const useCategoryTree = () => {
     if (!plugin) return
 
     const language =
-      plugin.data.storyLang === 'default' ? 'en' : plugin.data.storyLang
+      plugin.data.storyLang === 'default'
+        ? plugin.data.options.defaultLanguage || 'en'
+        : plugin.data.storyLang
 
     createToken({
       clientId: plugin.data.options.clientId,
