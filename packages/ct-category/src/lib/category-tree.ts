@@ -15,6 +15,7 @@ export const buildCategoryTree = (
   categories: Category[],
   language: string,
   level = 0,
+  ancestorId?: string,
 ): CategoryNode => {
   const root: CategoryNode = { id: '', name: '', level, children: [] }
 
@@ -37,7 +38,8 @@ export const buildCategoryTree = (
     const node = nodesMap.get(category.id)
     if (!node) continue
 
-    if (category.parent) {
+    // Consider ancestorId as the root category id if it is set
+    if (category.parent && category.parent.id !== ancestorId) {
       const parent = nodesMap.get(category.parent.id)
       if (parent) {
         node.level = parent.level + 1
