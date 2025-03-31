@@ -24,14 +24,14 @@ export const useCategoryTree = () => {
         baseUri: plugin.data.options.baseUri,
         token,
         projectKey: plugin.data.options.projectKey,
-        ancestorId: plugin.data.options.ancestorId,
+        ancestorKey: plugin.data.options.ancestorKey,
       }).then((categories) =>
         setCategoryTree(
           buildCategoryTree(
             categories,
             language,
             0,
-            plugin.data.options.ancestorId,
+            plugin.data.options.ancestorKey,
           ),
         ),
       ),

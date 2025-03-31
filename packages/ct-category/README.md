@@ -3,11 +3,18 @@
 This plugin provides a field for selecting a category from a commercetools project.
 To make this work you need to fill in 3 CT options:
 
-- projectKey: The commercetools project key
-- clientId: A commercetools API client id
-- clientSecret: A commercetools API client secret
+| Option         | Description                             |
+| -------------- | --------------------------------------- |
+| `projectKey`   | The commercetools project key           |
+| `clientId`     | A commercetools API client id           |
+| `clientSecret` | A commercetools API client secret       |
+| `ancestorKey`  | A commercetools category key (optional) |
 
-The clientId and clientSecret should be for a token that has at least a category read scope.
+The `clientId` and `clientSecret` should be for a token that has at least a category
+read scope.
+
+The `ancestorKey` is optional and can be used to filter the categories by a specific
+ancestor. If no `ancestorKey` is set, all categories will be fetched.
 
 ## Preview
 

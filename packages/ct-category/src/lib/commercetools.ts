@@ -31,23 +31,32 @@ export type SearchProps = {
   baseUri?: string
   token: string
   projectKey: string
-  ancestorId?: string
+  ancestorKey?: string
 }
 
 export const searchCategories = async ({
   baseUri = 'https://api.europe-west1.gcp.commercetools.com',
   token,
   projectKey,
-  ancestorId,
+  ancestorKey,
 }: SearchProps) => {
   const result: Category[] = []
   let page = 0
   let response: CategoryPagedQueryResponse
 
+  const ancestorId = ancestorKey
+    ? await getAncestorId(baseUri, token, projectKey, ancestorKey)
+    : undefined
+
+  if (ancestorKey && !ancestorId) {
+    console.warn(`Ancestor category ${ancestorKey} not found`)
+  }
+
   do {
     const queryParams = new URLSearchParams({
       limit: '500',
       offset: (page * 500).toString(),
+      expand: 'parent',
     })
 
     if (ancestorId) {
@@ -68,4 +77,23 @@ export const searchCategories = async ({
   } while (response.count === response.limit)
 
   return result
+}
+
+const getAncestorId = async (
+  baseUri = 'https://api.europe-west1.gcp.commercetools.com',
+  token: string,
+  projectKey: string,
+  ancestorKey: string,
+) => {
+  const response = await fetch(
+    `${baseUri}/${projectKey}/categories/key=${ancestorKey}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  ).then<Category>((res) => res.json())
+  return response?.id
 }
