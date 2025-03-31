@@ -1,7 +1,7 @@
 import { useFieldPlugin } from '@storyblok/field-plugin/react'
 import { useEffect, useState } from 'react'
-import { createToken, searchCategories } from '../lib/commercetools'
 import { CategoryNode, buildCategoryTree } from '../lib/category-tree'
+import { createToken, searchCategories } from '../lib/commercetools'
 
 export const useCategoryTree = () => {
   const [categoryTree, setCategoryTree] = useState<CategoryNode>()
@@ -24,8 +24,16 @@ export const useCategoryTree = () => {
         baseUri: plugin.data.options.baseUri,
         token,
         projectKey: plugin.data.options.projectKey,
+        ancestorKey: plugin.data.options.ancestorKey,
       }).then((categories) =>
-        setCategoryTree(buildCategoryTree(categories, language)),
+        setCategoryTree(
+          buildCategoryTree(
+            categories,
+            language,
+            0,
+            plugin.data.options.ancestorKey,
+          ),
+        ),
       ),
     )
   }, [plugin.data.options])
