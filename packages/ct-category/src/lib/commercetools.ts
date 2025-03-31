@@ -45,7 +45,7 @@ export const searchCategories = async ({
   let response: CategoryPagedQueryResponse
 
   const ancestorId = ancestorKey
-    ? await getAncestorId(baseUri, token, projectKey, ancestorKey)
+    ? await getCategoryId(baseUri, token, projectKey, ancestorKey)
     : undefined
 
   if (ancestorKey && !ancestorId) {
@@ -79,7 +79,7 @@ export const searchCategories = async ({
   return result
 }
 
-const getAncestorId = async (
+const getCategoryId = async (
   baseUri = 'https://api.europe-west1.gcp.commercetools.com',
   token: string,
   projectKey: string,
