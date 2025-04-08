@@ -1,27 +1,23 @@
-import { useFieldPlugin } from '@storyblok/field-plugin/react'
 import { useState } from 'react'
+import { useFieldPlugin } from '@storyblok/field-plugin/react'
+import './FieldPlugin.css'
 import { useCategoryTree } from '../hooks/useCategoryTree'
 import {
   filterCategoryTree,
   flattenCategoryTree,
   getCategoryPath,
 } from '../lib/category-tree'
-import './FieldPlugin.css'
 import { SearchField } from './SearchField'
 
 export function FieldPlugin() {
-  const { type, data, actions } = useFieldPlugin()
+  const plugin = useFieldPlugin()
   const categoryTree = useCategoryTree()
   const [search, setSearch] = useState('')
 
-  if (type !== 'loaded') {
-    return null
-  }
-
-  const content = data.content as { key?: string; id: string }
+  const content = plugin.data.content as { key?: string; id: string }
 
   const selectedCategoryPath =
-    data.content && categoryTree
+    plugin.data.content && categoryTree
       ? getCategoryPath(categoryTree, content.key ?? content.id)
       : undefined
 
@@ -36,7 +32,7 @@ export function FieldPlugin() {
       displayValue={selectedCategoryPath?.map((node) => node.name).join(' › ')}
       items={categoryNodes ?? []}
       onSelect={(category) =>
-        actions.setContent(
+        plugin.actions.setContent(
           category
             ? {
                 id: category.id,

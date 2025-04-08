@@ -5,35 +5,38 @@ import { createToken, searchCategories } from '../lib/commercetools'
 
 export const useCategoryTree = () => {
   const [categoryTree, setCategoryTree] = useState<CategoryNode>()
-  const { type, data } = useFieldPlugin()
+  const plugin = useFieldPlugin()
 
   useEffect(() => {
-    if (type !== 'loaded' || !data) return
+    if (!plugin) return
 
     const language =
-      data.storyLang === 'default'
-        ? data.options.defaultLanguage || 'en'
-        : data.storyLang
+      plugin.data.storyLang === 'default'
+        ? plugin.data.options.defaultLanguage || 'en'
+        : plugin.data.storyLang
 
     createToken({
-      clientId: data.options.clientId,
-      clientSecret: data.options.clientSecret,
-      projectKey: data.options.projectKey,
+      clientId: plugin.data.options.clientId,
+      clientSecret: plugin.data.options.clientSecret,
+      projectKey: plugin.data.options.projectKey,
     }).then((token) =>
       searchCategories({
-        baseUri: data.options.baseUri,
+        baseUri: plugin.data.options.baseUri,
         token,
-        projectKey: data.options.projectKey,
-        ancestorKey: data.options.ancestorKey,
+        projectKey: plugin.data.options.projectKey,
+        ancestorKey: plugin.data.options.ancestorKey,
       }).then((categories) =>
         setCategoryTree(
-          buildCategoryTree(categories, language, 0, data.options.ancestorKey),
+          buildCategoryTree(
+            categories,
+            language,
+            0,
+            plugin.data.options.ancestorKey,
+          ),
         ),
       ),
     )
-  }, [type, data?.options])
-
-  if (type !== 'loaded') return
+  }, [plugin.data.options])
 
   return categoryTree
 }
