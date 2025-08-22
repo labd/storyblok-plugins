@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - fix/ancestor-key
   workflow_call:
 
 env:
@@ -37,45 +36,45 @@ jobs:
         working-directory: packages/ct-category
         run: pnpm test
 
-  # deploy-ct-category:
-  #   needs: test-ct-category
-  #   name: Deploy CT category field plugin
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0
+  deploy-ct-category:
+    needs: test-ct-category
+    name: Deploy CT category field plugin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 20
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-  #     - uses: pnpm/action-setup@v2
-  #       id: pnpm-install
-  #       with:
-  #         version: 8
-  #         run_install: false
+      - uses: pnpm/action-setup@v2
+        id: pnpm-install
+        with:
+          version: 8
+          run_install: false
 
-  #     - name: Get pnpm store directory
-  #       id: pnpm-cache
-  #       shell: bash
-  #       run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-  #     - uses: actions/cache@v3
-  #       name: Setup pnpm cache
-  #       with:
-  #         path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-  #         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-pnpm-store-
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
-  #     - name: Install dependencies
-  #       run: pnpm install
+      - name: Install dependencies
+        run: pnpm install
 
-  #     - name: Build
-  #       working-directory: packages/ct-category
-  #       run: pnpm build
+      - name: Build
+        working-directory: packages/ct-category
+        run: pnpm build
 
-  #     - name: Deploy
-  #       working-directory: packages/ct-category
-  #       run: npx @storyblok/field-plugin-cli deploy --scope partner-portal --name ct-category --skipPrompts
+      - name: Deploy
+        working-directory: packages/ct-category
+        run: npx @storyblok/field-plugin-cli deploy --scope partner-portal --name ct-category --skipPrompts
