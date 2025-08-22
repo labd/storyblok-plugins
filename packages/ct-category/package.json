@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "deploy": "@storyblok/field-plugin-cli@beta deploy --dotEnvPath '../../.env'"
+    "deploy": "@storyblok/field-plugin-cli@beta deploy --dotEnvPath '../../.env'",
+    "test": "vitest run"
   },
   "dependencies": {
     "@commercetools/platform-sdk": "^6.0.0",
@@ -30,6 +31,7 @@
     "eslint-plugin-react": "7.30.0",
     "typescript": "5.1.6",
     "vite": "^4.2.2",
-    "vite-plugin-css-injected-by-js": "3.1.0"
+    "vite-plugin-css-injected-by-js": "3.1.0",
+    "vitest": "^2.1.8"
   }
 }

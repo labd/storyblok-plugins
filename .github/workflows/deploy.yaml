@@ -10,15 +10,42 @@ env:
   STORYBLOK_PERSONAL_ACCESS_TOKEN: ${{ secrets.STORYBLOK_PERSONAL_ACCESS_TOKEN }}
 
 jobs:
-  deploy-ct-category:
-    name: Deploy CT category field plugin
+  test-ct-category:
+    name: Test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v2
+        id: pnpm-install
+        with:
+          version: 8
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Test
+        working-directory: packages/ct-category
+        run: pnpm test
+
+  deploy-ct-category:
+    needs: test-ct-category
+    name: Deploy CT category field plugin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
