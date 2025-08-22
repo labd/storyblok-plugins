@@ -15,7 +15,6 @@ export const buildCategoryTree = (
   categories: Category[],
   language: string,
   level = 0,
-  ancestorKey?: string,
 ): CategoryNode => {
   const root: CategoryNode = { id: '', name: '', level, children: [] }
 
@@ -33,23 +32,32 @@ export const buildCategoryTree = (
     ]),
   )
 
-  // Set the children and the level of each node
   for (const category of categories) {
     const node = nodesMap.get(category.id)
     if (!node) continue
 
-    // Consider ancestor as the root category if the categoryKey is set
-    if (category.parent && category.parent?.obj?.key !== ancestorKey) {
+    if (category.parent) {
       const parent = nodesMap.get(category.parent.id)
       if (parent) {
-        node.level = parent.level + 1
         parent.children.push(node)
       }
     } else {
-      node.level = 1
       root.children.push(node)
     }
   }
+
+  const calculateLevels = (node: CategoryNode, currentLevel: number) => {
+    node.level = currentLevel
+    for (const child of node.children) {
+      calculateLevels(child, currentLevel + 1)
+    }
+  }
+
+  // Assign levels after building the tree to handle unsorted category input
+  for (const child of root.children) {
+    calculateLevels(child, 1)
+  }
+
   return root
 }
 

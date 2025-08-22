@@ -26,14 +26,7 @@ export const useCategoryTree = () => {
         projectKey: plugin.data.options.projectKey,
         ancestorKey: plugin.data.options.ancestorKey,
       }).then((categories) =>
-        setCategoryTree(
-          buildCategoryTree(
-            categories,
-            language,
-            0,
-            plugin.data.options.ancestorKey,
-          ),
-        ),
+        setCategoryTree(buildCategoryTree(categories, language, 0)),
       ),
     )
   }, [plugin.data.options])

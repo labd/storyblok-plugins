@@ -59,8 +59,12 @@ export const searchCategories = async ({
       expand: 'parent',
     })
 
+    // get ancestor category and all its descendants
     if (ancestorId) {
-      queryParams.append('where', `ancestors(id="${ancestorId}")`)
+      queryParams.append(
+        'where',
+        `id="${ancestorId}" or ancestors(id="${ancestorId}")`,
+      )
     }
 
     const url = `${baseUri}/${projectKey}/categories?${queryParams.toString()}`
