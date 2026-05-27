@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
-import { InstantSearch, SearchBox, Hits, Pagination, SortBy, Configure } from "react-instantsearch";
-import { createSearchClient, getIndexName, getSortItems } from "../lib/utils";
+import { useMemo, useState, useRef, useEffect, useCallback } from "react";
+import { InstantSearch, SearchBox, Hits, Pagination, SortBy, Configure, useHits, useCurrentRefinements, useInstantSearch } from "react-instantsearch";
+import { createSearchClient, getIndexName, getSortItems, getLocalizedValue } from "../lib/utils";
 import { LIMITS, STORES } from "../lib/config";
-import { PluginContent, SelectedProduct } from "../lib/types";
+import { AlgoliaHit, PluginContent, SelectedProduct } from "../lib/types";
 import { HitComponent } from "./SelectableHit";
 import { FilterPanel } from "./FilterPanel";
 import { StoreSelector } from "./StoreSelector";
@@ -10,6 +10,42 @@ import "./ProductSearchPanel.css";
 import { NoResultsBoundary } from "./NoResultsBoundary";
 import { TooltipTrigger, Tooltip, Button } from "react-aria-components";
 import { SelectionContext } from "./SelectionContext";
+
+type CategoryAutoSelectProps = {
+  onCategorySelect: (products: SelectedProduct[]) => void;
+};
+
+const CategoryAutoSelect = ({ onCategorySelect }: CategoryAutoSelectProps) => {
+  const { items: hits } = useHits<AlgoliaHit>();
+  const { items: refinements } = useCurrentRefinements();
+  const { status } = useInstantSearch();
+
+  const categoryRefinement = refinements.find(r => r.attribute.startsWith("hierarchicalCategories"));
+  const categoryValue = categoryRefinement?.refinements[0]?.value !== undefined
+    ? String(categoryRefinement.refinements[0].value)
+    : undefined;
+
+  const lastAutoSelectedRef = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (categoryValue === undefined) {
+      lastAutoSelectedRef.current = undefined;
+      return;
+    }
+
+    if (status === "idle" && categoryValue !== lastAutoSelectedRef.current) {
+      lastAutoSelectedRef.current = categoryValue;
+      const products = hits.slice(0, LIMITS.maxProducts).map(hit => ({
+        objectID: hit.objectID,
+        name: getLocalizedValue(hit.name),
+        image: typeof hit.image === "string" ? hit.image : "",
+      }));
+      onCategorySelect(products);
+    }
+  }, [status, categoryValue, hits, onCategorySelect]);
+
+  return null;
+};
 
 type Props = {
   content: PluginContent;
@@ -26,6 +62,10 @@ export const ProductSearchPanel = ({
 }: Props) => {
   const [storeKey, setStoreKey] = useState(content.storeKey || options.storeKey || "nl");
   const [selected, setSelected] = useState<SelectedProduct[]>(content.products);
+
+  const handleCategorySelect = useCallback((products: SelectedProduct[]) => {
+    setSelected(products);
+  }, []);
 
   const searchClient = useMemo(
     () => createSearchClient(options.algoliaAppId, options.algoliaSearchApiKey),
@@ -58,6 +98,7 @@ export const ProductSearchPanel = ({
 
       <InstantSearch searchClient={searchClient} indexName={indexName} key={storeKey}>
         <Configure hitsPerPage={30} />
+        <CategoryAutoSelect onCategorySelect={handleCategorySelect} />
 
         <div className="search-panel__toolbar">
           <div className="toolbar-group">
