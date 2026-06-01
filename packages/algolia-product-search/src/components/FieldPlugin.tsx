@@ -12,9 +12,17 @@ const DEFAULT_CONTENT: PluginContent = {
 const FieldPlugin = () => {
   const { type, data, actions } = useFieldPlugin({
     enablePortalModal: true,
-    validateContent: (content: unknown) => ({
-      content: isValidPluginContent(content) ? content : DEFAULT_CONTENT,
-    }),
+    validateContent: (content: unknown) => {
+      if (!isValidPluginContent(content)) return { content: DEFAULT_CONTENT };
+      return {
+        content: {
+          ...content,
+          products: content.products.filter(
+            (p, i, arr) => arr.findIndex((x) => x.objectID === p.objectID) === i
+          ),
+        },
+      };
+    },
   });
 
   if (type !== "loaded") {

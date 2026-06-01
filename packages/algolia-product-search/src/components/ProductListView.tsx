@@ -12,8 +12,12 @@ type Props = {
 };
 
 export const ProductListView = ({ content, onUpdate, onOpenModal }: Props) => {
+  const uniqueProducts = content.products.filter(
+    (p, i, arr) => arr.findIndex((x) => x.objectID === p.objectID) === i
+  );
+
   const list = useListData({
-    initialItems: content.products,
+    initialItems: uniqueProducts,
     getKey: (item) => item.objectID,
   });
 
