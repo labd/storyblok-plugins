@@ -1,0 +1,21 @@
+.store-selector {
+  padding: 7px 12px;
+  border: 1px solid var(--light);
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  background: var(--white);
+  color: var(--sb_dark_blue);
+  cursor: pointer;
+  transition: border-color var(--transition);
+  height: 45px;
+}
+
+.store-selector:hover {
+  border-color: var(--sb_green_50);
+}
+
+.store-selector:focus {
+  outline: none;
+  border-color: var(--sb_green);
+  box-shadow: 0 0 0 2px var(--sb_green_25);
+}
