@@ -40,7 +40,6 @@ export const ProductListView = ({ content, onUpdate, onOpenModal }: Props) => {
 
   const handleRemove = (product: SelectedProduct) => {
     const updated = list.items.filter((p) => p.objectID !== product.objectID);
-    list.remove(product.objectID);
     onUpdate({ ...content, products: updated });
   };
 
