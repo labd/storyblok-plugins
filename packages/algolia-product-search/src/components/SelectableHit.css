@@ -1,0 +1,128 @@
+.selectable-hit {
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid var(--light);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--white);
+  overflow: hidden;
+  padding: 0;
+}
+
+.selectable-hit:hover {
+  border-color: var(--sb_green_50);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.selectable-hit--selected {
+  border-color: var(--sb_green);
+  box-shadow: 0 0 0 2px var(--sb_green_25);
+}
+
+.selectable-hit--selected:hover {
+  border-color: var(--sb_green);
+}
+
+.selectable-hit--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.selectable-hit__media {
+  position: relative;
+  padding: 12px;
+  background: var(--white);
+  display: flex;
+  justify-content: center;
+}
+
+.selectable-hit__image {
+    height: 110px;
+    max-width: 100%;
+    display: block;
+}
+
+.selectable-hit__checkbox {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.selectable-hit__content {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px 12px;
+  background: var(--light_25);
+  border-top: 1px solid var(--light_75);
+  flex: 1;
+}
+
+.selectable-hit--selected .selectable-hit__content {
+  background: var(--sb_green_25);
+  border-top-color: var(--sb_green_50);
+}
+
+.selectable-hit__name {
+  font-weight: 500;
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--sb_dark_blue);
+}
+
+.selectable-hit__category {
+  font-size: 0.7rem;
+  color: var(--sb_dark_blue_50);
+  text-transform: capitalize;
+}
+
+.selectable-hit__price {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--sb_dark_blue);
+}
+
+.selectable-hit__tags {
+  position: absolute;
+  left: 5px;
+  bottom: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+.selectable-hit__tag {
+  font-size: 0.6rem;
+  font-weight: 500;
+  padding: 0px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.selectable-hit__tag--green {
+  background: var(--green_25);
+  color: var(--green);
+}
+
+.selectable-hit__tag--red {
+  background: var(--red_25);
+  color: var(--red);
+}
+
+.selectable-hit__tag--neutral {
+  background: var(--light_50);
+  color: var(--sb_dark_blue_75);
+}

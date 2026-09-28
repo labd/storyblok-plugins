@@ -1,0 +1,16 @@
+{
+  "options": [
+    {
+      "name": "algoliaAppId",
+      "value": "APP_ID"
+    },
+    {
+      "name": "algoliaSearchApiKey",
+      "value": "SEARCH_API_KEY"
+    },
+    {
+      "name": "storeKey",
+      "value": "nl"
+    }
+  ]
+}

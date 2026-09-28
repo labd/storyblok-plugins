@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+html {
+  overflow: auto;
+  height: 100%;
+}
+
+:root {
+  --sb_green: #00b3b0;
+  --sb_green_75: #40c6c4;
+  --sb_green_50: #7fd9d7;
+  --sb_green_25: #d9f4f3;
+  --sb_dark_blue: #1b243f;
+  --sb_dark_blue_75: #545b6f;
+  --sb_dark_blue_50: #8d919f;
+  --sb_dark_blue_25: #c6c8cf;
+  --green: #2db47d;
+  --green_75: #62c79e;
+  --green_50: #96d9be;
+  --green_25: #caecde;
+  --yellow: #fbce41;
+  --yellow_75: #fcdb71;
+  --yellow_50: #fde6a0;
+  --yellow_25: #fef3cf;
+  --blue: #395ece;
+  --blue_75: #6b87db;
+  --blue_50: #9caee6;
+  --blue_25: #cdd7f3;
+  --orange: #ffac00;
+  --orange_75: #ffc140;
+  --orange_50: #ffd57f;
+  --orange_25: #ffeabf;
+  --red: #ff6159;
+  --red_75: #ff8983;
+  --red_50: #ffb0ac;
+  --red_25: #ffd7d5;
+  --light: #dfe3e8;
+  --light_75: #e7eaee;
+  --light_50: #eff1f3;
+  --light_25: #f7f8f9;
+  --light_gray: #b1b5be;
+  --black: #101525;
+  --white: #fff;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --shadow-sm: 0 1px 2px rgba(27, 36, 63, 0.06);
+  --shadow-md: 0 2px 8px rgba(27, 36, 63, 0.08);
+  --shadow-lg: 0 4px 16px rgba(27, 36, 63, 0.1);
+  --transition: 0.15s ease;
+
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  line-height: 1.5;
+  font-weight: 400;
+  font-size: 18px;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+#app {
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  box-sizing: border-box;
+}
+
+/* Shared buttons */
+.btn-primary {
+  background: var(--sb_green);
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.8rem;
+  transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  background: #009e9b;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary {
+  background: var(--white);
+  color: var(--sb_dark_blue);
+  border: 1px solid var(--light);
+  padding: 8px 18px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.8rem;
+  transition: all var(--transition);
+}
+
+.btn-secondary:hover {
+  border-color: var(--sb_dark_blue_25);
+  background: var(--light_50);
+}
+
+.btn-secondary:active {
+  transform: scale(0.97);
+}

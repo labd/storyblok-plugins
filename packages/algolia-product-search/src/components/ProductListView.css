@@ -1,0 +1,74 @@
+.product-list-view {
+  padding: 8px;
+}
+
+.product-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.product-list-header span {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--sb_dark_blue_50);
+}
+
+.product-list-empty {
+  text-align: center;
+  color: var(--sb_dark_blue_50);
+}
+
+.product-list-empty p {
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+}
+
+/* React Aria GridList */
+[role="grid"] {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+[role="row"] {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid var(--light);
+  border-radius: var(--radius-md);
+  margin-bottom: 6px;
+  cursor: grab;
+  transition: box-shadow var(--transition), border-color var(--transition);
+  background: var(--white);
+}
+
+[role="row"]:hover {
+  border-color: var(--light_75);
+  box-shadow: var(--shadow-sm);
+}
+
+[role="row"]:focus-visible {
+  outline: none;
+  border-color: var(--sb_green);
+  box-shadow: 0 0 0 2px var(--sb_green_25);
+}
+
+[role="row"][data-dragging] {
+  opacity: 0.4;
+}
+
+[role="row"][data-drop-target] {
+  border-color: var(--sb_green);
+  background: var(--sb_green_25);
+}
+
+.react-aria-DropIndicator[data-drop-target] {
+  height: 48px;
+  margin: 4px 0;
+  background: var(--sb_green_25);
+  border: 2px dashed var(--sb_green);
+  border-radius: var(--radius-md);
+  outline: none;
+}
