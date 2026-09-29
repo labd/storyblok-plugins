@@ -1,6 +1,6 @@
 import { liteClient as algoliasearch } from "algoliasearch/lite";
 import { SORT_SUFFIXES } from "./config";
-import { PluginContent } from "./types";
+import { PluginContent, SelectedProduct } from "./types";
 
 export const createSearchClient = (appId: string, apiKey: string) =>
   algoliasearch(appId, apiKey);
@@ -47,6 +47,20 @@ export function formatAssortmentType(type: string): string {
   };
 
   return labels[type] ?? type;
+};
+
+export function dedupeProducts(products: SelectedProduct[]): SelectedProduct[] {
+  const seen = new Set<string>();
+
+  return products.filter((product) => {
+    if (seen.has(product.objectID)) {
+      return false;
+    }
+
+    seen.add(product.objectID);
+
+    return true;
+  });
 };
 
 export function isValidPluginContent(content: unknown): content is PluginContent {
