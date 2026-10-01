@@ -38,7 +38,7 @@ export const SelectableHit = ({ hit, isSelected, isDisabled, onToggle }: Props) 
           type="checkbox"
           checked={isSelected}
           disabled={isDisabled}
-          onChange={onToggle}
+          readOnly
           className="selectable-hit__checkbox"
           aria-hidden="true"
           tabIndex={-1}

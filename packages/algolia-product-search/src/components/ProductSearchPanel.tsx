@@ -1,6 +1,6 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from "react";
 import { InstantSearch, SearchBox, Hits, Pagination, SortBy, Configure, useHits, useCurrentRefinements, useInstantSearch } from "react-instantsearch";
-import { createSearchClient, getIndexName, getSortItems, getLocalizedValue } from "../lib/utils";
+import { createSearchClient, dedupeProducts, getIndexName, getSortItems, getLocalizedValue } from "../lib/utils";
 import { LIMITS, STORES } from "../lib/config";
 import { AlgoliaHit, PluginContent, SelectedProduct } from "../lib/types";
 import { HitComponent } from "./SelectableHit";
@@ -78,16 +78,20 @@ export const ProductSearchPanel = ({
   const selectedIds = new Set(selected.map((p) => p.objectID));
   const isAtLimit = selected.length >= LIMITS.maxProducts;
 
-  const toggleProduct = (product: SelectedProduct) => {
-    if (selectedIds.has(product.objectID)) {
-      setSelected((prev) => prev.filter((p) => p.objectID !== product.objectID));
-    } else if (!isAtLimit) {
-      setSelected((prev) => [...prev, product]);
-    };
-  };
+  const toggleProduct = useCallback((product: SelectedProduct) => {
+    setSelected((prev) => {
+      if (prev.some((p) => p.objectID === product.objectID)) {
+        return prev.filter((p) => p.objectID !== product.objectID);
+      }
+      if (prev.length >= LIMITS.maxProducts) {
+        return prev;
+      }
+      return [...prev, product];
+    });
+  }, []);
 
   const handleConfirm = () => {
-    onConfirm({ products: selected, storeKey });
+    onConfirm({ products: dedupeProducts(selected), storeKey });
   };
 
   return (

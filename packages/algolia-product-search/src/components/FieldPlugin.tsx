@@ -2,7 +2,7 @@ import { useFieldPlugin } from "@storyblok/field-plugin/react";
 import { PluginContent } from "../lib/types";
 import { ProductListView } from "./ProductListView";
 import { ProductSearchPanel } from "./ProductSearchPanel";
-import { isValidPluginContent } from "../lib/utils";
+import { dedupeProducts, isValidPluginContent } from "../lib/utils";
 
 const DEFAULT_CONTENT: PluginContent = {
   products: [],
@@ -17,9 +17,7 @@ const FieldPlugin = () => {
       return {
         content: {
           ...content,
-          products: content.products.filter(
-            (p, i, arr) => arr.findIndex((x) => x.objectID === p.objectID) === i
-          ),
+          products: dedupeProducts(content.products),
         },
       };
     },

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { GridList, GridListItem, useDragAndDrop, useListData } from "react-aria-components";
 import { PluginContent, SelectedProduct } from "../lib/types";
 import { LIMITS } from "../lib/config";
+import { dedupeProducts } from "../lib/utils";
 import { ProductListItem } from "./ProductListItem";
 import "./ProductListView.css";
 
@@ -12,9 +13,7 @@ type Props = {
 };
 
 export const ProductListView = ({ content, onUpdate, onOpenModal }: Props) => {
-  const uniqueProducts = content.products.filter(
-    (p, i, arr) => arr.findIndex((x) => x.objectID === p.objectID) === i
-  );
+  const uniqueProducts = dedupeProducts(content.products);
 
   const list = useListData({
     initialItems: uniqueProducts,
