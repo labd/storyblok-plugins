@@ -1,13 +1,12 @@
 # Algolia Product Search — Storyblok Field Plugin
 
-A Storyblok field plugin that allows to search and select products from an Algolia index. Products can be reordered via drag-and-drop in the inline view.
+A Storyblok field plugin that lets editors search and select products from Algolia. Products can be reordered via drag-and-drop in the inline view.
 
 ## Features
 
 - Full-text search powered by Algolia InstantSearch
 - Filter by category, stock status, availability, and assortment type
-- Sort by relevance, price ascending, or price descending
-- Multi-store support (switch between Algolia index prefixes)
+- Multi-store support with configurable stores and sort options
 - Select up to 30 products
 - Drag-and-drop reordering of selected products
 - Modal UI integrated with Storyblok's portal modal
@@ -16,11 +15,77 @@ A Storyblok field plugin that allows to search and select products from an Algol
 
 Configure these options in your Storyblok field plugin settings (or in `field-plugin.config.json` for local development):
 
-| Option               | Description                          | Example          |
-| -------------------- | ------------------------------------ | ---------------- |
-| `algoliaAppId`       | Your Algolia Application ID          | `ABC123DEF4`     |
-| `algoliaSearchApiKey`| Algolia Search-Only API Key          | `abc123...`      |
-| `storeKey`           | Default store/index prefix           | `nl`             |
+| Option                | Description                                  |
+| --------------------- | -------------------------------------------- |
+| `algoliaAppId`        | Algolia application ID                       |
+| `algoliaSearchApiKey` | Algolia search-only API key                  |
+| `stores`              | Stores the editor can search in (optional)   |
+| `sorts`               | Sort options in the sort dropdown (optional) |
+
+The plugin searches one Algolia index per store and sort. Each sort has an index name
+pattern, and `{store}` in that pattern is replaced with the selected store key. Store
+`nl` with pattern `{store}_newest` searches the index `nl_newest`.
+
+Without `stores`, the plugin offers the stores `nl`, `at`, `de`, `fr`, `be`, `lu`, `pt`
+and `es`. Without `sorts`, it offers Relevance (`{store}_default`), Price (low to high)
+(`{store}_price_asc`) and Price (high to low) (`{store}_price_desc`). An invalid value
+is ignored; the reason is logged in the browser console.
+
+### `stores`
+
+A JSON array:
+
+```json
+[
+  { "key": "nl", "default": true },
+  { "key": "be", "label": "Belgium" }
+]
+```
+
+| Field     | Required | Description                                                       |
+| --------- | -------- | ----------------------------------------------------------------- |
+| `key`     | yes      | Store key, used for `{store}` in the index patterns.              |
+| `label`   | no       | Label in the store dropdown. Defaults to the upper-cased key.     |
+| `default` | no       | Preselected store for an empty field. Defaults to the first store. |
+
+### `sorts`
+
+A JSON array:
+
+```json
+[
+  { "key": "relevance",  "label": "Relevance",           "index": "{store}_default", "default": true },
+  { "key": "price_asc",  "label": "Price (low to high)", "index": "{store}_price_asc" },
+  { "key": "price_desc", "label": "Price (high to low)", "index": "{store}_price_desc" },
+  { "key": "newest",     "label": "Newest first",        "index": "{store}_newest" }
+]
+```
+
+| Field     | Required | Description                                                   |
+| --------- | -------- | ------------------------------------------------------------- |
+| `key`     | yes      | Unique name of the sort option.                               |
+| `index`   | yes      | Index name pattern. `{store}` is replaced with the store key. |
+| `label`   | no       | Label in the sort dropdown. Defaults to the key.              |
+| `default` | no       | Preselected sort. Defaults to the first sort.                 |
+
+Every pattern must resolve to an existing Algolia index for every store.
+
+### Terraform example
+
+If you manage the Storyblok space with Terraform, build each value with `jsonencode()`:
+
+```hcl
+options = [
+  { name = "algoliaAppId",        value = var.algolia_app_id },
+  { name = "algoliaSearchApiKey", value = var.algolia_search_api_key },
+  { name = "sorts", value = jsonencode([
+    { key = "relevance",  label = "Relevance",           index = "{store}_default", default = true },
+    { key = "price_asc",  label = "Price (low to high)", index = "{store}_price_asc" },
+    { key = "price_desc", label = "Price (high to low)", index = "{store}_price_desc" },
+    { key = "newest",     label = "Newest first",        index = "{store}_newest" },
+  ]) },
+]
+```
 
 ## Stored Data Structure
 
@@ -32,7 +97,7 @@ The plugin stores a JSON object in the Storyblok content field:
     {
       "objectID": "abc123",
       "name": "Product Name",
-      "image": "https://...",
+      "image": "https://..."
     }
   ],
   "storeKey": "nl"

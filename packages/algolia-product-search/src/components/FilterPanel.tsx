@@ -7,15 +7,7 @@ export const FilterPanel = () => {
     <div className="filter-panel">
       <div className="filter-panel__section">
         <h3>Category</h3>
-        <HierarchicalMenu
-          attributes={[
-            "hierarchicalCategories.lvl0",
-            "hierarchicalCategories.lvl1",
-            "hierarchicalCategories.lvl2",
-            "hierarchicalCategories.lvl3",
-          ]}
-          showMore
-        />
+        <HierarchicalMenu attributes={[...FACETS.hierarchicalCategories]} showMore />
       </div>
 
       <div className="filter-panel__section">

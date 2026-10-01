@@ -56,7 +56,7 @@ export const SelectableHit = ({ hit, isSelected, isDisabled, onToggle }: Props) 
       </div>
       <div className="selectable-hit__content">
         <span className="selectable-hit__name">{getLocalizedValue(hit.name)}</span>
-        <span className="selectable-hit__category">{(hit.hierarchicalCategories as any)?.lvl0 ?? ""}</span>
+        <span className="selectable-hit__category">{hit.hierarchicalCategories?.lvl0 ?? ""}</span>
         <span className="selectable-hit__price">€{(Number(getLocalizedValue(hit.salesPrice)) || 0).toFixed(2)}</span>
       </div>
     </article>

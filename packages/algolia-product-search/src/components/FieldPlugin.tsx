@@ -1,12 +1,14 @@
+import { useMemo } from "react";
 import { useFieldPlugin } from "@storyblok/field-plugin/react";
 import { PluginContent } from "../lib/types";
 import { ProductListView } from "./ProductListView";
 import { ProductSearchPanel } from "./ProductSearchPanel";
-import { dedupeProducts, isValidPluginContent } from "../lib/utils";
+import { dedupeProducts, getDefault, isValidPluginContent } from "../lib/utils";
+import { DEFAULT_STORES, parseOptions } from "../lib/options";
 
 const DEFAULT_CONTENT: PluginContent = {
   products: [],
-  storeKey: "nl"
+  storeKey: getDefault(DEFAULT_STORES).key
 };
 
 const FieldPlugin = () => {
@@ -23,12 +25,13 @@ const FieldPlugin = () => {
     },
   });
 
+  const options = useMemo(() => parseOptions(data?.options ?? {}), [data?.options]);
+
   if (type !== "loaded") {
     return null;
   };
 
   const content = data.content as PluginContent;
-  const options = data.options as Record<string, string>;
 
   if (!options.algoliaAppId || !options.algoliaSearchApiKey) {
     return (
