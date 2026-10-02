@@ -26,7 +26,6 @@ const CategoryAutoSelect = ({ onCategorySelect }: CategoryAutoSelectProps) => {
     ? String(categoryRefinement.refinements[0].value)
     : undefined;
 
-  // `results.index` changes only after the new hits arrive; `indexUiState.sortBy` changes before.
   const autoSelectKey = categoryValue === undefined
     ? undefined
     : `${results.index}::${categoryValue}`;
