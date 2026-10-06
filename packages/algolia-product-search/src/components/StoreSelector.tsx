@@ -1,9 +1,10 @@
 import './StoreSelector.css';
+import { StoreConfig } from '../lib/options';
 
 type Props = {
   value: string;
   onChange: (value: string) => void;
-  stores: readonly string[];
+  stores: StoreConfig[];
 };
 
 export const StoreSelector = ({ value, onChange, stores }: Props) => {
@@ -15,8 +16,8 @@ export const StoreSelector = ({ value, onChange, stores }: Props) => {
       aria-label="Select store"
     >
       {stores.map((store) => (
-        <option key={store} value={store}>
-          {store.toUpperCase()}
+        <option key={store.key} value={store.key}>
+          {store.label ?? store.key.toUpperCase()}
         </option>
       ))}
     </select>

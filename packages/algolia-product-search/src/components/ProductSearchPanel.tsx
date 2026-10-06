@@ -1,7 +1,8 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from "react";
 import { InstantSearch, SearchBox, Hits, Pagination, SortBy, Configure, useHits, useCurrentRefinements, useInstantSearch } from "react-instantsearch";
-import { createSearchClient, dedupeProducts, getIndexName, getSortItems, getLocalizedValue } from "../lib/utils";
-import { LIMITS, STORES } from "../lib/config";
+import { createSearchClient, dedupeProducts, getDefault, getSortItems, getLocalizedValue, resolveIndexName } from "../lib/utils";
+import { LIMITS } from "../lib/config";
+import { PluginOptions } from "../lib/options";
 import { AlgoliaHit, PluginContent, SelectedProduct } from "../lib/types";
 import { HitComponent } from "./SelectableHit";
 import { FilterPanel } from "./FilterPanel";
@@ -18,23 +19,27 @@ type CategoryAutoSelectProps = {
 const CategoryAutoSelect = ({ onCategorySelect }: CategoryAutoSelectProps) => {
   const { items: hits } = useHits<AlgoliaHit>();
   const { items: refinements } = useCurrentRefinements();
-  const { status } = useInstantSearch();
+  const { status, results } = useInstantSearch();
 
   const categoryRefinement = refinements.find(r => r.attribute.startsWith("hierarchicalCategories"));
   const categoryValue = categoryRefinement?.refinements[0]?.value !== undefined
     ? String(categoryRefinement.refinements[0].value)
     : undefined;
 
+  const autoSelectKey = categoryValue === undefined
+    ? undefined
+    : `${results.index}::${categoryValue}`;
+
   const lastAutoSelectedRef = useRef<string | undefined>(undefined);
 
   useEffect(() => {
-    if (categoryValue === undefined) {
+    if (autoSelectKey === undefined) {
       lastAutoSelectedRef.current = undefined;
       return;
     }
 
-    if (status === "idle" && categoryValue !== lastAutoSelectedRef.current) {
-      lastAutoSelectedRef.current = categoryValue;
+    if (status === "idle" && autoSelectKey !== lastAutoSelectedRef.current) {
+      lastAutoSelectedRef.current = autoSelectKey;
       const products = hits.slice(0, LIMITS.maxProducts).map(hit => ({
         objectID: hit.objectID,
         name: getLocalizedValue(hit.name),
@@ -42,14 +47,14 @@ const CategoryAutoSelect = ({ onCategorySelect }: CategoryAutoSelectProps) => {
       }));
       onCategorySelect(products);
     }
-  }, [status, categoryValue, hits, onCategorySelect]);
+  }, [status, autoSelectKey, hits, onCategorySelect]);
 
   return null;
 };
 
 type Props = {
   content: PluginContent;
-  options: Record<string, string>;
+  options: PluginOptions;
   onConfirm: (content: PluginContent) => void;
   onCancel: () => void;
 };
@@ -60,7 +65,11 @@ export const ProductSearchPanel = ({
   onConfirm,
   onCancel,
 }: Props) => {
-  const [storeKey, setStoreKey] = useState(content.storeKey || options.storeKey || "nl");
+  const [storeKey, setStoreKey] = useState(
+    options.stores.some((store) => store.key === content.storeKey)
+      ? content.storeKey
+      : getDefault(options.stores).key,
+  );
   const [selected, setSelected] = useState<SelectedProduct[]>(content.products);
 
   const handleCategorySelect = useCallback((products: SelectedProduct[]) => {
@@ -72,8 +81,12 @@ export const ProductSearchPanel = ({
     [options.algoliaAppId, options.algoliaSearchApiKey],
   );
 
-  const indexName = getIndexName(storeKey);
-  const sortItems = getSortItems(storeKey);
+  const sortItems = useMemo(
+    () => getSortItems(options.sorts, storeKey),
+    [options.sorts, storeKey],
+  );
+
+  const indexName = resolveIndexName(getDefault(options.sorts), storeKey);
 
   const selectedIds = new Set(selected.map((p) => p.objectID));
   const isAtLimit = selected.length >= LIMITS.maxProducts;
@@ -101,13 +114,13 @@ export const ProductSearchPanel = ({
       </header>
 
       <InstantSearch searchClient={searchClient} indexName={indexName} key={storeKey}>
-        <Configure hitsPerPage={30} />
+        <Configure hitsPerPage={LIMITS.maxProducts} />
         <CategoryAutoSelect onCategorySelect={handleCategorySelect} />
 
         <div className="search-panel__toolbar">
           <div className="toolbar-group">
             <label className="toolbar-label">Store</label>
-            <StoreSelector value={storeKey} onChange={setStoreKey} stores={STORES} />
+            <StoreSelector value={storeKey} onChange={setStoreKey} stores={options.stores} />
           </div>
           <div className="toolbar-group toolbar-group--grow">
             <label className="toolbar-label">Search</label>
