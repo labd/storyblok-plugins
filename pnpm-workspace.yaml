@@ -4,14 +4,6 @@ packages:
 minimumReleaseAge: 20160 # 14 days
 # Locked versions younger than 14 days when moving to pnpm 12; drop once they are older (after 2026-11-06).
 minimumReleaseAgeExclude:
-  - "@vitest/expect@4.1.12"
-  - "@vitest/mocker@4.1.12"
-  - "@vitest/pretty-format@4.1.12"
-  - "@vitest/runner@4.1.12"
-  - "@vitest/snapshot@4.1.12"
-  - "@vitest/spy@4.1.12"
-  - "@vitest/ui@4.1.12"
-  - "@vitest/utils@4.1.12"
   - "baseline-browser-mapping@2.11.31"
   - "browserslist@4.29.4"
   - "caniuse-lite@1.0.30001819"
@@ -21,7 +13,6 @@ minimumReleaseAgeExclude:
   - "postcss@8.5.31"
   - "qs@6.16.1"
   - "vite@6.4.5"
-  - "vitest@4.1.12"
 
 overrides:
   postcss-selector-parser@<7.1.6: ^7.1.6
