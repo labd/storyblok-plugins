@@ -7,6 +7,7 @@ export const useCategoryTree = () => {
 	const [categoryTree, setCategoryTree] = useState<CategoryNode>();
 	const plugin = useFieldPlugin();
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only refetch when the plugin options change, not on every plugin state update
 	useEffect(() => {
 		if (!plugin) return;
 

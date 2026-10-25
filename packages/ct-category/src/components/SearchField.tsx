@@ -68,6 +68,7 @@ export function SearchField<T extends object>({
 								setOpen(false);
 							}, 200)
 						}
+						// biome-ignore lint/a11y/noAutofocus: the search input is only rendered after the user opens the dropdown
 						autoFocus
 						onKeyDown={(event) => {
 							switch (event.key) {
@@ -105,6 +106,7 @@ export function SearchField<T extends object>({
 						<ul className="options" ref={listRef}>
 							<li>
 								<button
+									type="button"
 									onClick={() => {
 										onSelect(null);
 										close();
@@ -117,6 +119,7 @@ export function SearchField<T extends object>({
 							{items.map((node, i) => (
 								<li key={JSON.stringify(node)}>
 									<button
+										type="button"
 										onClick={() => {
 											onSelect(node);
 											close();
@@ -132,6 +135,7 @@ export function SearchField<T extends object>({
 				</div>
 			) : (
 				<button
+					type="button"
 					className="display"
 					onClick={() => setOpen(true)}
 					ref={buttonRef}
