@@ -21,7 +21,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "prettier": "2.8.0",
     "typescript": "4.6.4",
-    "vite": "^6.4.5"
+    "vite": "^8.3.4"
   },
   "packageManager": "pnpm@12.12.0+sha512.2ee06ac86db554cf384421461220f0e336a487bfd41b2acd04e17a86b1487832fe45e8d1743f7fc52acc77de12d2356b536fedf8229fc483239e40b13d474449"
 }

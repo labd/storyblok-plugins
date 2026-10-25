@@ -13,9 +13,9 @@ export default defineConfig({
   },
   plugins: [react(), cssInjectedByJs(), ...plugins],
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        format: 'commonjs',
+        format: 'cjs',
         entryFileNames: `[name].js`,
         chunkFileNames: `[name].js`,
         assetFileNames: `[name].[ext]`,
