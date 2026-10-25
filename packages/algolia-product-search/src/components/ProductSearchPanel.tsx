@@ -1,178 +1,221 @@
-import { useMemo, useState, useRef, useEffect, useCallback } from "react";
-import { InstantSearch, SearchBox, Hits, Pagination, SortBy, Configure, useHits, useCurrentRefinements, useInstantSearch } from "react-instantsearch";
-import { createSearchClient, dedupeProducts, getDefault, getSortItems, getLocalizedValue, resolveIndexName } from "../lib/utils";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+	Configure,
+	Hits,
+	InstantSearch,
+	Pagination,
+	SearchBox,
+	SortBy,
+	useCurrentRefinements,
+	useHits,
+	useInstantSearch,
+} from "react-instantsearch";
 import { LIMITS } from "../lib/config";
-import { PluginOptions } from "../lib/options";
-import { AlgoliaHit, PluginContent, SelectedProduct } from "../lib/types";
-import { HitComponent } from "./SelectableHit";
+import type { PluginOptions } from "../lib/options";
+import type { AlgoliaHit, PluginContent, SelectedProduct } from "../lib/types";
+import {
+	createSearchClient,
+	dedupeProducts,
+	getDefault,
+	getLocalizedValue,
+	getSortItems,
+	resolveIndexName,
+} from "../lib/utils";
 import { FilterPanel } from "./FilterPanel";
+import { HitComponent } from "./SelectableHit";
 import { StoreSelector } from "./StoreSelector";
 import "./ProductSearchPanel.css";
+import { Button, Tooltip, TooltipTrigger } from "react-aria-components";
 import { NoResultsBoundary } from "./NoResultsBoundary";
-import { TooltipTrigger, Tooltip, Button } from "react-aria-components";
 import { SelectionContext } from "./SelectionContext";
 
 type CategoryAutoSelectProps = {
-  onCategorySelect: (products: SelectedProduct[]) => void;
+	onCategorySelect: (products: SelectedProduct[]) => void;
 };
 
 const CategoryAutoSelect = ({ onCategorySelect }: CategoryAutoSelectProps) => {
-  const { items: hits } = useHits<AlgoliaHit>();
-  const { items: refinements } = useCurrentRefinements();
-  const { status, results } = useInstantSearch();
+	const { items: hits } = useHits<AlgoliaHit>();
+	const { items: refinements } = useCurrentRefinements();
+	const { status, results } = useInstantSearch();
 
-  const categoryRefinement = refinements.find(r => r.attribute.startsWith("hierarchicalCategories"));
-  const categoryValue = categoryRefinement?.refinements[0]?.value !== undefined
-    ? String(categoryRefinement.refinements[0].value)
-    : undefined;
+	const categoryRefinement = refinements.find((r) =>
+		r.attribute.startsWith("hierarchicalCategories"),
+	);
+	const categoryValue =
+		categoryRefinement?.refinements[0]?.value !== undefined
+			? String(categoryRefinement.refinements[0].value)
+			: undefined;
 
-  const autoSelectKey = categoryValue === undefined
-    ? undefined
-    : `${results.index}::${categoryValue}`;
+	const autoSelectKey =
+		categoryValue === undefined
+			? undefined
+			: `${results.index}::${categoryValue}`;
 
-  const lastAutoSelectedRef = useRef<string | undefined>(undefined);
+	const lastAutoSelectedRef = useRef<string | undefined>(undefined);
 
-  useEffect(() => {
-    if (autoSelectKey === undefined) {
-      lastAutoSelectedRef.current = undefined;
-      return;
-    }
+	useEffect(() => {
+		if (autoSelectKey === undefined) {
+			lastAutoSelectedRef.current = undefined;
+			return;
+		}
 
-    if (status === "idle" && autoSelectKey !== lastAutoSelectedRef.current) {
-      lastAutoSelectedRef.current = autoSelectKey;
-      const products = hits.slice(0, LIMITS.maxProducts).map(hit => ({
-        objectID: hit.objectID,
-        name: getLocalizedValue(hit.name),
-        image: typeof hit.image === "string" ? hit.image : "",
-      }));
-      onCategorySelect(products);
-    }
-  }, [status, autoSelectKey, hits, onCategorySelect]);
+		if (status === "idle" && autoSelectKey !== lastAutoSelectedRef.current) {
+			lastAutoSelectedRef.current = autoSelectKey;
+			const products = hits.slice(0, LIMITS.maxProducts).map((hit) => ({
+				objectID: hit.objectID,
+				name: getLocalizedValue(hit.name),
+				image: typeof hit.image === "string" ? hit.image : "",
+			}));
+			onCategorySelect(products);
+		}
+	}, [status, autoSelectKey, hits, onCategorySelect]);
 
-  return null;
+	return null;
 };
 
 type Props = {
-  content: PluginContent;
-  options: PluginOptions;
-  onConfirm: (content: PluginContent) => void;
-  onCancel: () => void;
+	content: PluginContent;
+	options: PluginOptions;
+	onConfirm: (content: PluginContent) => void;
+	onCancel: () => void;
 };
 
 export const ProductSearchPanel = ({
-  content,
-  options,
-  onConfirm,
-  onCancel,
+	content,
+	options,
+	onConfirm,
+	onCancel,
 }: Props) => {
-  const [storeKey, setStoreKey] = useState(
-    options.stores.some((store) => store.key === content.storeKey)
-      ? content.storeKey
-      : getDefault(options.stores).key,
-  );
-  const [selected, setSelected] = useState<SelectedProduct[]>(content.products);
+	const [storeKey, setStoreKey] = useState(
+		options.stores.some((store) => store.key === content.storeKey)
+			? content.storeKey
+			: getDefault(options.stores).key,
+	);
+	const [selected, setSelected] = useState<SelectedProduct[]>(content.products);
 
-  const handleCategorySelect = useCallback((products: SelectedProduct[]) => {
-    setSelected(products);
-  }, []);
+	const handleCategorySelect = useCallback((products: SelectedProduct[]) => {
+		setSelected(products);
+	}, []);
 
-  const searchClient = useMemo(
-    () => createSearchClient(options.algoliaAppId, options.algoliaSearchApiKey),
-    [options.algoliaAppId, options.algoliaSearchApiKey],
-  );
+	const searchClient = useMemo(
+		() => createSearchClient(options.algoliaAppId, options.algoliaSearchApiKey),
+		[options.algoliaAppId, options.algoliaSearchApiKey],
+	);
 
-  const sortItems = useMemo(
-    () => getSortItems(options.sorts, storeKey),
-    [options.sorts, storeKey],
-  );
+	const sortItems = useMemo(
+		() => getSortItems(options.sorts, storeKey),
+		[options.sorts, storeKey],
+	);
 
-  const indexName = resolveIndexName(getDefault(options.sorts), storeKey);
+	const indexName = resolveIndexName(getDefault(options.sorts), storeKey);
 
-  const selectedIds = new Set(selected.map((p) => p.objectID));
-  const isAtLimit = selected.length >= LIMITS.maxProducts;
+	const selectedIds = new Set(selected.map((p) => p.objectID));
+	const isAtLimit = selected.length >= LIMITS.maxProducts;
 
-  const toggleProduct = useCallback((product: SelectedProduct) => {
-    setSelected((prev) => {
-      if (prev.some((p) => p.objectID === product.objectID)) {
-        return prev.filter((p) => p.objectID !== product.objectID);
-      }
-      if (prev.length >= LIMITS.maxProducts) {
-        return prev;
-      }
-      return [...prev, product];
-    });
-  }, []);
+	const toggleProduct = useCallback((product: SelectedProduct) => {
+		setSelected((prev) => {
+			if (prev.some((p) => p.objectID === product.objectID)) {
+				return prev.filter((p) => p.objectID !== product.objectID);
+			}
+			if (prev.length >= LIMITS.maxProducts) {
+				return prev;
+			}
+			return [...prev, product];
+		});
+	}, []);
 
-  const handleConfirm = () => {
-    onConfirm({ products: dedupeProducts(selected), storeKey });
-  };
+	const handleConfirm = () => {
+		onConfirm({ products: dedupeProducts(selected), storeKey });
+	};
 
-  return (
-    <div className="search-panel">
-      <header className="search-panel__header">
-        <h2>Select products</h2>
-      </header>
+	return (
+		<div className="search-panel">
+			<header className="search-panel__header">
+				<h2>Select products</h2>
+			</header>
 
-      <InstantSearch searchClient={searchClient} indexName={indexName} key={storeKey}>
-        <Configure hitsPerPage={LIMITS.maxProducts} />
-        <CategoryAutoSelect onCategorySelect={handleCategorySelect} />
+			<InstantSearch
+				searchClient={searchClient}
+				indexName={indexName}
+				key={storeKey}
+			>
+				<Configure hitsPerPage={LIMITS.maxProducts} />
+				<CategoryAutoSelect onCategorySelect={handleCategorySelect} />
 
-        <div className="search-panel__toolbar">
-          <div className="toolbar-group">
-            <label className="toolbar-label">Store</label>
-            <StoreSelector value={storeKey} onChange={setStoreKey} stores={options.stores} />
-          </div>
-          <div className="toolbar-group toolbar-group--grow">
-            <label className="toolbar-label">Search</label>
-            <SearchBox placeholder="Search by name or AVS number..." />
-          </div>
-          <div className="toolbar-group">
-            <label className="toolbar-label">Sort by</label>
-            <SortBy items={sortItems} />
-          </div>
-        </div>
+				<div className="search-panel__toolbar">
+					<div className="toolbar-group">
+						<label className="toolbar-label">Store</label>
+						<StoreSelector
+							value={storeKey}
+							onChange={setStoreKey}
+							stores={options.stores}
+						/>
+					</div>
+					<div className="toolbar-group toolbar-group--grow">
+						<label className="toolbar-label">Search</label>
+						<SearchBox placeholder="Search by name or AVS number..." />
+					</div>
+					<div className="toolbar-group">
+						<label className="toolbar-label">Sort by</label>
+						<SortBy items={sortItems} />
+					</div>
+				</div>
 
-        <div className="search-panel__body">
-          <aside className="search-panel__filters">
-            <FilterPanel />
-          </aside>
+				<div className="search-panel__body">
+					<aside className="search-panel__filters">
+						<FilterPanel />
+					</aside>
 
-          <main className="search-panel__results">
-            <SelectionContext.Provider value={{ selectedIds, isAtLimit, toggleProduct }}>
-              <NoResultsBoundary fallback={
-                <div className="no-results">
-                  <p>No products found</p>
-                  <span>Try adjusting your search or filters.</span>
-                </div>
-              }>
-                <Hits hitComponent={HitComponent} />
-                <Pagination />
-              </NoResultsBoundary>
-            </SelectionContext.Provider>
-          </main>
-        </div>
-      </InstantSearch>
+					<main className="search-panel__results">
+						<SelectionContext.Provider
+							value={{ selectedIds, isAtLimit, toggleProduct }}
+						>
+							<NoResultsBoundary
+								fallback={
+									<div className="no-results">
+										<p>No products found</p>
+										<span>Try adjusting your search or filters.</span>
+									</div>
+								}
+							>
+								<Hits hitComponent={HitComponent} />
+								<Pagination />
+							</NoResultsBoundary>
+						</SelectionContext.Provider>
+					</main>
+				</div>
+			</InstantSearch>
 
-      <footer className="search-panel__footer">
-        <span className="search-panel__counter">
-          Selected: {selected.length} / {LIMITS.maxProducts}
-        </span>
-        <div className="selected-bar__items">
-          {selected.map((product) => (
-            <TooltipTrigger key={product.objectID} delay={300}>
-              <Button className="selected-bar__item" onPress={() => toggleProduct(product)} aria-label={`Remove ${product.name}`}>
-                <img src={product.image} alt={product.name} />
-                <span className="selected-bar__remove">✕</span>
-              </Button>
-              <Tooltip className="selected-bar__tooltip">{product.name}</Tooltip>
-            </TooltipTrigger>
-          ))}
-        </div>
-        <div>
-          <button type="button" onClick={onCancel} className="btn-secondary">Cancel</button>
-          <button type="button" onClick={handleConfirm} className="btn-primary">Confirm</button>
-        </div>
-      </footer>
-    </div>
-  );
+			<footer className="search-panel__footer">
+				<span className="search-panel__counter">
+					Selected: {selected.length} / {LIMITS.maxProducts}
+				</span>
+				<div className="selected-bar__items">
+					{selected.map((product) => (
+						<TooltipTrigger key={product.objectID} delay={300}>
+							<Button
+								className="selected-bar__item"
+								onPress={() => toggleProduct(product)}
+								aria-label={`Remove ${product.name}`}
+							>
+								<img src={product.image} alt={product.name} />
+								<span className="selected-bar__remove">✕</span>
+							</Button>
+							<Tooltip className="selected-bar__tooltip">
+								{product.name}
+							</Tooltip>
+						</TooltipTrigger>
+					))}
+				</div>
+				<div>
+					<button type="button" onClick={onCancel} className="btn-secondary">
+						Cancel
+					</button>
+					<button type="button" onClick={handleConfirm} className="btn-primary">
+						Confirm
+					</button>
+				</div>
+			</footer>
+		</div>
+	);
 };

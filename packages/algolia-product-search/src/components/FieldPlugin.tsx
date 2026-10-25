@@ -1,68 +1,74 @@
-import { useMemo } from "react";
 import { useFieldPlugin } from "@storyblok/field-plugin/react";
-import { PluginContent } from "../lib/types";
+import { useMemo } from "react";
+import { DEFAULT_STORES, parseOptions } from "../lib/options";
+import type { PluginContent } from "../lib/types";
+import { dedupeProducts, getDefault, isValidPluginContent } from "../lib/utils";
 import { ProductListView } from "./ProductListView";
 import { ProductSearchPanel } from "./ProductSearchPanel";
-import { dedupeProducts, getDefault, isValidPluginContent } from "../lib/utils";
-import { DEFAULT_STORES, parseOptions } from "../lib/options";
 
 const DEFAULT_CONTENT: PluginContent = {
-  products: [],
-  storeKey: getDefault(DEFAULT_STORES).key
+	products: [],
+	storeKey: getDefault(DEFAULT_STORES).key,
 };
 
 const FieldPlugin = () => {
-  const { type, data, actions } = useFieldPlugin({
-    enablePortalModal: true,
-    validateContent: (content: unknown) => {
-      if (!isValidPluginContent(content)) return { content: DEFAULT_CONTENT };
-      return {
-        content: {
-          ...content,
-          products: dedupeProducts(content.products),
-        },
-      };
-    },
-  });
+	const { type, data, actions } = useFieldPlugin({
+		enablePortalModal: true,
+		validateContent: (content: unknown) => {
+			if (!isValidPluginContent(content)) return { content: DEFAULT_CONTENT };
+			return {
+				content: {
+					...content,
+					products: dedupeProducts(content.products),
+				},
+			};
+		},
+	});
 
-  const options = useMemo(() => parseOptions(data?.options ?? {}), [data?.options]);
+	const options = useMemo(
+		() => parseOptions(data?.options ?? {}),
+		[data?.options],
+	);
 
-  if (type !== "loaded") {
-    return null;
-  };
+	if (type !== "loaded") {
+		return null;
+	}
 
-  const content = data.content as PluginContent;
+	const content = data.content as PluginContent;
 
-  if (!options.algoliaAppId || !options.algoliaSearchApiKey) {
-    return (
-      <div className="error">
-        Missing Algolia configuration. Please set <code>algoliaAppId</code> and <code>algoliaSearchApiKey</code> in the plugin options.
-      </div>
-    );
-  };
+	if (!options.algoliaAppId || !options.algoliaSearchApiKey) {
+		return (
+			<div className="error">
+				Missing Algolia configuration. Please set <code>algoliaAppId</code> and{" "}
+				<code>algoliaSearchApiKey</code> in the plugin options.
+			</div>
+		);
+	}
 
-  if (data.isModalOpen) {
-    return (
-      <ProductSearchPanel
-        content={content}
-        options={options}
-        onConfirm={(updatedContent) => {
-          actions.setContent(updatedContent);
-          actions.setModalOpen(false);
-        }}
-        onCancel={() => actions.setModalOpen(false)}
-      />
-    );
-  };
+	if (data.isModalOpen) {
+		return (
+			<ProductSearchPanel
+				content={content}
+				options={options}
+				onConfirm={(updatedContent) => {
+					actions.setContent(updatedContent);
+					actions.setModalOpen(false);
+				}}
+				onCancel={() => actions.setModalOpen(false)}
+			/>
+		);
+	}
 
-  return (
-    <ProductListView
-      key={[...content.products.map(p => p.objectID)].sort().join(",")}
-      content={content}
-      onUpdate={(updatedContent) => actions.setContent(updatedContent)}
-      onOpenModal={() => actions.setModalOpen(true, { width: "100vw", height: "100vh" })}
-    />
-  );
-}
+	return (
+		<ProductListView
+			key={[...content.products.map((p) => p.objectID)].sort().join(",")}
+			content={content}
+			onUpdate={(updatedContent) => actions.setContent(updatedContent)}
+			onOpenModal={() =>
+				actions.setModalOpen(true, { width: "100vw", height: "100vh" })
+			}
+		/>
+	);
+};
 
 export default FieldPlugin;
