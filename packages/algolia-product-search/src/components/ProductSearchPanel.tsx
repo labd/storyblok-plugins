@@ -144,7 +144,7 @@ export const ProductSearchPanel = ({
 
 				<div className="search-panel__toolbar">
 					<div className="toolbar-group">
-						<label className="toolbar-label">Store</label>
+						<span className="toolbar-label">Store</span>
 						<StoreSelector
 							value={storeKey}
 							onChange={setStoreKey}
@@ -152,11 +152,11 @@ export const ProductSearchPanel = ({
 						/>
 					</div>
 					<div className="toolbar-group toolbar-group--grow">
-						<label className="toolbar-label">Search</label>
+						<span className="toolbar-label">Search</span>
 						<SearchBox placeholder="Search by name or AVS number..." />
 					</div>
 					<div className="toolbar-group">
-						<label className="toolbar-label">Sort by</label>
+						<span className="toolbar-label">Sort by</span>
 						<SortBy items={sortItems} />
 					</div>
 				</div>

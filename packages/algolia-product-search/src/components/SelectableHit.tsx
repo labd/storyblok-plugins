@@ -17,7 +17,8 @@ export const SelectableHit = ({
 	onToggle,
 }: Props) => {
 	return (
-		<article
+		// biome-ignore lint/a11y/useSemanticElements: the whole card acts as a keyboard accessible checkbox
+		<div
 			className={`selectable-hit ${isSelected ? "selectable-hit--selected" : ""} ${isDisabled ? "selectable-hit--disabled" : ""}`}
 			onClick={isDisabled ? undefined : onToggle}
 			role="checkbox"
@@ -72,7 +73,7 @@ export const SelectableHit = ({
 					€{(Number(getLocalizedValue(hit.salesPrice)) || 0).toFixed(2)}
 				</span>
 			</div>
-		</article>
+		</div>
 	);
 };
 

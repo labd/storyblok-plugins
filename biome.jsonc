@@ -19,7 +19,8 @@
 		"rules": {
 			"preset": "recommended",
 			"complexity": {
-				"noForEach": "off"
+				"noForEach": "off",
+				"noImportantStyles": "off"
 			},
 			"correctness": {
 				"noUnusedFunctionParameters": "off",
@@ -28,13 +29,17 @@
 			},
 			"style": {
 				"noNonNullAssertion": "off",
-				"noParameterAssign": "off"
+				"noParameterAssign": "off",
+				"noDescendingSpecificity": "off"
 			},
 			"suspicious": {
 				"noImplicitAnyLet": "off",
 				"noExplicitAny": "off",
 				"noExportsInTest": "off",
-				"noConsole": { "level": "error", "options": { "allow": ["log"] } }
+				"noConsole": {
+					"level": "error",
+					"options": { "allow": ["log", "warn", "error"] }
+				}
 			}
 		}
 	},
