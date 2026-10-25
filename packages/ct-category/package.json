@@ -19,7 +19,7 @@
   },
   "engines": {
     "node": ">=22",
-    "pnpm": ">=8"
+    "pnpm": ">=12"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
