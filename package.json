@@ -1,21 +1,21 @@
 {
-  "name": "field-plugin-monorepo-template",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
-  "scripts": {
-    "add-plugin": "npx @storyblok/field-plugin-cli@beta add --dir \"./packages\" --structure monorepo --packageManager pnpm",
-    "lint": "biome check",
-    "format": "biome check --write"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "2.5.15",
-    "@types/node": "22.20.5",
-    "typescript": "4.6.4",
-    "vite": "^8.3.4"
-  },
-  "packageManager": "pnpm@12.12.0+sha512.2ee06ac86db554cf384421461220f0e336a487bfd41b2acd04e17a86b1487832fe45e8d1743f7fc52acc77de12d2356b536fedf8229fc483239e40b13d474449"
+	"name": "field-plugin-monorepo-template",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"workspaces": [
+		"packages/*"
+	],
+	"scripts": {
+		"add-plugin": "npx @storyblok/field-plugin-cli@beta add --dir \"./packages\" --structure monorepo --packageManager pnpm",
+		"lint": "biome check",
+		"format": "biome check --write"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.5.15",
+		"@types/node": "22.20.5",
+		"typescript": "4.6.4",
+		"vite": "^8.3.4"
+	},
+	"packageManager": "pnpm@12.12.0+sha512.2ee06ac86db554cf384421461220f0e336a487bfd41b2acd04e17a86b1487832fe45e8d1743f7fc52acc77de12d2356b536fedf8229fc483239e40b13d474449"
 }

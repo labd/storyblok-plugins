@@ -1,38 +1,38 @@
 {
-  "name": "@labdigital/storyblok-algolia-plugin",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "test": "vitest",
-    "build": "tsc && vite build",
-    "lint": "biome check",
-    "preview": "vite preview",
-    "deploy": "npm run build && npx @storyblok/field-plugin-cli@latest deploy --dotEnvPath '../../.env'"
-  },
-  "dependencies": {
-    "@storyblok/field-plugin": "1.7.1",
-    "algoliasearch": "5.52.1",
-    "instantsearch.css": "8.16.1",
-    "react": "^18.3.1",
-    "react-aria-components": "1.17.0",
-    "react-dom": "^18.3.1",
-    "react-instantsearch": "7.32.3",
-    "zod": "4.4.3"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "6.6.3",
-    "@testing-library/react": "14.3.1",
-    "@testing-library/user-event": "14.6.1",
-    "@types/react": "^18.3.10",
-    "@types/react-dom": "^18.2.19",
-    "@vitejs/plugin-react": "^6.1.2",
-    "@vitest/ui": "5.0.3",
-    "jsdom": "22.1.0",
-    "typescript": "5.8.2",
-    "vite": "8.3.4",
-    "vite-plugin-css-injected-by-js": "5.0.2",
-    "vitest": "5.0.3"
-  }
+	"name": "@labdigital/storyblok-algolia-plugin",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"test": "vitest",
+		"build": "tsc && vite build",
+		"lint": "biome check",
+		"preview": "vite preview",
+		"deploy": "npm run build && npx @storyblok/field-plugin-cli@latest deploy --dotEnvPath '../../.env'"
+	},
+	"dependencies": {
+		"@storyblok/field-plugin": "1.7.1",
+		"algoliasearch": "5.52.1",
+		"instantsearch.css": "8.16.1",
+		"react": "^18.3.1",
+		"react-aria-components": "1.17.0",
+		"react-dom": "^18.3.1",
+		"react-instantsearch": "7.32.3",
+		"zod": "4.4.3"
+	},
+	"devDependencies": {
+		"@testing-library/jest-dom": "6.6.3",
+		"@testing-library/react": "14.3.1",
+		"@testing-library/user-event": "14.6.1",
+		"@types/react": "^18.3.10",
+		"@types/react-dom": "^18.2.19",
+		"@vitejs/plugin-react": "^6.1.2",
+		"@vitest/ui": "5.0.3",
+		"jsdom": "22.1.0",
+		"typescript": "5.8.2",
+		"vite": "8.3.4",
+		"vite-plugin-css-injected-by-js": "5.0.2",
+		"vitest": "5.0.3"
+	}
 }

@@ -1,16 +1,16 @@
-import { SelectedProduct } from "../lib/types";
 import { createContext, useContext } from "react";
+import type { SelectedProduct } from "../lib/types";
 
 export type SelectionContextType = {
-    selectedIds: Set<string>;
-    isAtLimit: boolean;
-    toggleProduct: (product: SelectedProduct) => void;
+	selectedIds: Set<string>;
+	isAtLimit: boolean;
+	toggleProduct: (product: SelectedProduct) => void;
 };
 
 export const SelectionContext = createContext<SelectionContextType>({
-    selectedIds: new Set(),
-    isAtLimit: false,
-    toggleProduct: () => { },
+	selectedIds: new Set(),
+	isAtLimit: false,
+	toggleProduct: () => {},
 });
 
 export const useSelection = () => useContext(SelectionContext);
