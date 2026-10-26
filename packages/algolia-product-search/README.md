@@ -112,29 +112,33 @@ pnpm dev
 
 Open the [Storyblok Plugin Sandbox](https://plugin-sandbox.storyblok.com/field-plugin/) to test locally.
 
-## Build
+## Build and test
 
 ```shell
-pnpm build
+pnpm build  # tsc + vite build
+pnpm test   # Vitest
+pnpm lint   # Biome
 ```
 
 ## Deploy
 
-Create a `.env` file at the monorepo root with your Storyblok personal access token:
+This plugin is not deployed by CI. Create a `.env` file at the monorepo root (see
+`.env.local.example`) with your Storyblok personal access token:
 
 ```
 STORYBLOK_PERSONAL_ACCESS_TOKEN=your-token-here
 ```
 
-Then deploy:
+Then deploy from this directory. Use `pnpm run deploy`, because `pnpm deploy` is a
+built-in pnpm command:
 
 ```shell
-pnpm deploy
+pnpm run deploy
 ```
 
 ## Tech Stack
 
-- React 18
+- React 19
 - [Algolia InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/) (react-instantsearch v7)
 - [React Aria Components](https://react-spectrum.adobe.com/react-aria/) (GridList + drag-and-drop)
 - [@storyblok/field-plugin](https://github.com/storyblok/field-plugin)
