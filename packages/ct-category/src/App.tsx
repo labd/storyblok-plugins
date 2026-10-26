@@ -1,13 +1,17 @@
-import { FieldPluginProvider } from "@storyblok/field-plugin/react";
+import { useFieldPlugin } from "@storyblok/field-plugin/react";
 import type { FunctionComponent } from "react";
 import { FieldPlugin } from "./components/FieldPlugin";
 
 const App: FunctionComponent = () => {
-	return (
-		<FieldPluginProvider Loading={Loading} Error={ErrorMessage}>
-			<FieldPlugin />
-		</FieldPluginProvider>
-	);
+	const plugin = useFieldPlugin();
+
+	if (plugin.type === "loading") {
+		return <Loading />;
+	}
+	if (plugin.type === "error") {
+		return <ErrorMessage error={plugin.error} />;
+	}
+	return <FieldPlugin data={plugin.data} actions={plugin.actions} />;
 };
 
 const Loading: FunctionComponent = () => <p>Loading...</p>;

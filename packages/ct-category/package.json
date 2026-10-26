@@ -7,24 +7,23 @@
 		"dev": "vite",
 		"build": "tsc && vite build",
 		"preview": "vite preview",
-		"deploy": "@storyblok/field-plugin-cli@beta deploy --dotEnvPath '../../.env'",
+		"deploy": "pnpm build && pnpm dlx @storyblok/field-plugin-cli@latest deploy --dotEnvPath '../../.env'",
 		"test": "vitest run",
 		"lint": "biome check"
 	},
 	"dependencies": {
-		"@commercetools/platform-sdk": "^6.0.0",
-		"@commercetools/sdk-client-v2": "^2.2.0",
-		"@storyblok/field-plugin": "0.0.1-beta.4",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
+		"@commercetools/platform-sdk": "^9.7.0",
+		"@storyblok/field-plugin": "1.7.1",
+		"react": "^19.3.0",
+		"react-dom": "^19.3.0"
 	},
 	"engines": {
 		"node": ">=22.12.0",
 		"pnpm": ">=12"
 	},
 	"devDependencies": {
-		"@types/react": "^18.0.28",
-		"@types/react-dom": "^18.0.11",
+		"@types/react": "^19.3.0",
+		"@types/react-dom": "^19.3.0",
 		"@vitejs/plugin-react": "^6.1.2",
 		"typescript": "7.0.2",
 		"vite": "^8.3.4",
