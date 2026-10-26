@@ -7,6 +7,7 @@ export const parentCategory: Category = {
 	createdAt: "2021-01-01T00:00:00.000Z",
 	lastModifiedAt: "2021-01-01T00:00:00.000Z",
 	orderHint: "0.000000000001",
+	stores: [],
 	ancestors: [],
 	name: {
 		en: "Parent Category Name",
@@ -25,6 +26,7 @@ export const childCategory: Category = {
 	createdAt: "2021-01-01T00:00:00.000Z",
 	lastModifiedAt: "2021-01-01T00:00:00.000Z",
 	orderHint: "0.000000000001",
+	stores: [],
 	name: {
 		en: "Child Category Name",
 		nl: "Naam van de onderliggende categorie",
@@ -57,6 +59,7 @@ export const grandchildCategory: Category = {
 	createdAt: "2021-01-01T00:00:00.000Z",
 	lastModifiedAt: "2021-01-01T00:00:00.000Z",
 	orderHint: "0.000000000001",
+	stores: [],
 	name: {
 		en: "Grandchild Category Name",
 		nl: "Naam van de kleinkind categorie",
@@ -90,6 +93,7 @@ export const standaloneCategory: Category = {
 	createdAt: "2021-01-01T00:00:00.000Z",
 	lastModifiedAt: "2021-01-01T00:00:00.000Z",
 	orderHint: "0.000000000001",
+	stores: [],
 	name: {
 		en: "Standalone Category Name",
 		nl: "Naam van de zelfstandige categorie",

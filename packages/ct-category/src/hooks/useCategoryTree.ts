@@ -1,36 +1,36 @@
-import { useFieldPlugin } from "@storyblok/field-plugin/react";
 import { useEffect, useState } from "react";
 import { buildCategoryTree, type CategoryNode } from "../lib/category-tree";
 import { createToken, searchCategories } from "../lib/commercetools";
 
-export const useCategoryTree = () => {
+export const useCategoryTree = (
+	options: Record<string, string>,
+	storyLang: string,
+) => {
 	const [categoryTree, setCategoryTree] = useState<CategoryNode>();
-	const plugin = useFieldPlugin();
+	// The options object may be recreated on every plugin state update, so
+	// compare by value to only refetch when the options actually change.
+	const optionsKey = JSON.stringify(options);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: only refetch when the plugin options change, not on every plugin state update
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only refetch when the plugin options change (by value), not on every plugin state update
 	useEffect(() => {
-		if (!plugin) return;
-
 		const language =
-			plugin.data.storyLang === "default"
-				? plugin.data.options.defaultLanguage || "en"
-				: plugin.data.storyLang;
+			storyLang === "default" ? options.defaultLanguage || "en" : storyLang;
 
 		createToken({
-			clientId: plugin.data.options.clientId,
-			clientSecret: plugin.data.options.clientSecret,
-			projectKey: plugin.data.options.projectKey,
+			clientId: options.clientId,
+			clientSecret: options.clientSecret,
+			projectKey: options.projectKey,
 		}).then((token) =>
 			searchCategories({
-				baseUri: plugin.data.options.baseUri,
+				baseUri: options.baseUri,
 				token,
-				projectKey: plugin.data.options.projectKey,
-				ancestorKey: plugin.data.options.ancestorKey,
+				projectKey: options.projectKey,
+				ancestorKey: options.ancestorKey,
 			}).then((categories) =>
 				setCategoryTree(buildCategoryTree(categories, language, 0)),
 			),
 		);
-	}, [plugin.data.options]);
+	}, [optionsKey]);
 
 	return categoryTree;
 };
