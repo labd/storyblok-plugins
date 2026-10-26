@@ -7,7 +7,7 @@
 		"packages/*"
 	],
 	"scripts": {
-		"add-plugin": "pnpm dlx @storyblok/field-plugin-cli@beta add --dir \"./packages\" --structure monorepo --packageManager pnpm",
+		"add-plugin": "pnpm exec field-plugin add --dir \"./packages\" --structure monorepo --packageManager pnpm",
 		"lint": "biome check",
 		"format": "biome check --write",
 		"typecheck": "pnpm -r exec tsc",
@@ -15,6 +15,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.5.15",
+		"@storyblok/field-plugin-cli": "1.5.5",
 		"@types/node": "26.6.5",
 		"typescript": "7.0.2",
 		"vite": "^8.3.4"
