@@ -1,20 +1,37 @@
 # Commercetools Category Field Plugin
 
-This plugin provides a field for selecting a category from a commercetools project.
-To make this work you need to fill in 3 CT options:
+A Storyblok field plugin that lets editors select a single category from a
+commercetools project. Categories are shown as a searchable tree, with names in the
+language of the story.
 
-| Option         | Description                             |
-| -------------- | --------------------------------------- |
-| `projectKey`   | The commercetools project key           |
-| `clientId`     | A commercetools API client id           |
-| `clientSecret` | A commercetools API client secret       |
-| `ancestorKey`  | A commercetools category key (optional) |
+## Plugin options
 
-The `clientId` and `clientSecret` should be for a token that has **only** the
-`view_categories` scope.
+Configure these options in the Storyblok field plugin settings:
 
-The `ancestorKey` is optional and can be used to filter the categories by a specific
-ancestor. If no `ancestorKey` is set, all categories will be fetched.
+| Option            | Required | Description                                                                                     |
+| ----------------- | -------- | ----------------------------------------------------------------------------------------------- |
+| `projectKey`      | yes      | The commercetools project key                                                                   |
+| `clientId`        | yes      | A commercetools API client id                                                                   |
+| `clientSecret`    | yes      | A commercetools API client secret                                                               |
+| `ancestorKey`     | no       | Only show categories below the category with this key. Without it, all categories are fetched. |
+| `baseUri`         | no       | commercetools API URL. Defaults to `https://api.europe-west1.gcp.commercetools.com`.            |
+| `defaultLanguage` | no       | Language for category names when the story uses the default language. Defaults to `en`.         |
+
+The API client must have **only** the `view_categories` scope. The token is requested
+from `https://auth.europe-west1.gcp.commercetools.com`; other regions are not
+supported for authentication.
+
+## Stored data
+
+The plugin stores the selected category in the content field, or `null` when the
+selection is cleared:
+
+```json
+{
+  "id": "4f5c1f3e-0000-0000-0000-000000000000",
+  "key": "shoes"
+}
+```
 
 ## Preview
 
@@ -25,22 +42,30 @@ ancestor. If no `ancestorKey` is set, all categories will be fetched.
 
 ## Development
 
-Install dependencies
+Install dependencies from the repository root:
 
 ```shell
 pnpm install
 ```
 
-Run the application locally with
+Run the plugin locally:
 
 ```shell
 pnpm dev
 ```
 
-and open the [Sandbox](https://plugin-sandbox.storyblok.com/field-plugin/).
+Then open the [Storyblok Plugin Sandbox](https://plugin-sandbox.storyblok.com/field-plugin/)
+and fill in the options described above.
 
-Then fill in the 3 options as described above.
+Other scripts:
+
+```shell
+pnpm test   # Vitest
+pnpm build  # tsc + vite build
+pnpm lint   # Biome
+```
 
 ## Deployment
 
-To deploy, simply push to main.
+Every push to `main` runs the tests, builds the plugin and deploys it to the Storyblok
+partner portal as `ct-category` (see `.github/workflows/deploy.yaml`).
