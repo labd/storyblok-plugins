@@ -54,4 +54,4 @@ jobs:
         working-directory: packages/ct-category
         env:
           STORYBLOK_PERSONAL_ACCESS_TOKEN: ${{ secrets.STORYBLOK_PERSONAL_ACCESS_TOKEN }}
-        run: pnpm dlx @storyblok/field-plugin-cli deploy --scope partner-portal --name ct-category --skipPrompts
+        run: pnpm exec field-plugin deploy --scope partner-portal --name ct-category --skipPrompts

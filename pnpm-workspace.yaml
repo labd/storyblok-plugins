@@ -17,5 +17,7 @@ minimumReleaseAgeExclude:
   - "zod@4.6.6"
 
 overrides:
+  # vite is only referenced by the CLI's scaffolding templates, not at runtime; drop the outdated, vulnerable vite 5.
+  "@storyblok/field-plugin-cli>vite": "-"
   valibot@<1.4.2: ^1.4.2
   zod@<4.6.6: ^4.6.6

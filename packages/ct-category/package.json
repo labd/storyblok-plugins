@@ -7,7 +7,7 @@
 		"dev": "vite",
 		"build": "tsc && vite build",
 		"preview": "vite preview",
-		"deploy": "pnpm build && pnpm dlx @storyblok/field-plugin-cli@latest deploy --dotEnvPath '../../.env'",
+		"deploy": "pnpm build && pnpm exec field-plugin deploy --dotEnvPath '../../.env'",
 		"test": "vitest run",
 		"lint": "biome check"
 	},
@@ -22,6 +22,7 @@
 		"pnpm": ">=12"
 	},
 	"devDependencies": {
+		"@storyblok/field-plugin-cli": "1.5.5",
 		"@types/react": "^19.3.0",
 		"@types/react-dom": "^19.3.0",
 		"@vitejs/plugin-react": "^6.1.2",

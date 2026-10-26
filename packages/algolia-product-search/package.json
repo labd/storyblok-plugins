@@ -9,7 +9,7 @@
 		"build": "tsc && vite build",
 		"lint": "biome check",
 		"preview": "vite preview",
-		"deploy": "pnpm build && pnpm dlx @storyblok/field-plugin-cli@latest deploy --dotEnvPath '../../.env'"
+		"deploy": "pnpm build && pnpm exec field-plugin deploy --dotEnvPath '../../.env'"
 	},
 	"dependencies": {
 		"@storyblok/field-plugin": "1.7.1",
@@ -22,6 +22,7 @@
 		"zod": "4.6.6"
 	},
 	"devDependencies": {
+		"@storyblok/field-plugin-cli": "1.5.5",
 		"@testing-library/jest-dom": "7.0.1",
 		"@testing-library/react": "16.3.3",
 		"@testing-library/user-event": "14.6.7",
