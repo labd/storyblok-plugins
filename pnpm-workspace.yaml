@@ -13,8 +13,6 @@ minimumReleaseAgeExclude:
   - "@vitest/spy@5.0.5"
   - "@vitest/ui@5.0.5"
   - "@vitest/utils@5.0.5"
-  # GHSA-mrhx-c7xc-m3w5 (zod <4.6.6) is fixed in zod 4.6.6, released 2026-10-11; drop after 2026-10-26.
-  - "zod@4.6.6"
   # GHSA advisories for undici <8.12.2 (via jsdom) are fixed in undici 8.12.2, released 2026-10-15; drop after 2026-10-29.
   - "undici@8.12.2"
 
