@@ -1,4 +1,8 @@
-import { formatAssortmentType, getLocalizedValue } from "../lib/utils";
+import {
+	formatAssortmentType,
+	getLocalizedValue,
+	hitToProduct,
+} from "../lib/utils";
 import "./SelectableHit.css";
 import type { AlgoliaHit } from "../lib/types";
 import { useSelection } from "./SelectionContext";
@@ -86,13 +90,7 @@ export const HitComponent = ({ hit }: { hit: AlgoliaHit }) => {
 			hit={hit}
 			isSelected={isSelected}
 			isDisabled={isAtLimit && !isSelected}
-			onToggle={() =>
-				toggleProduct({
-					objectID: hit.objectID,
-					name: getLocalizedValue(hit.name),
-					image: typeof hit.image === "string" ? hit.image : "",
-				})
-			}
+			onToggle={() => toggleProduct(hitToProduct(hit))}
 		/>
 	);
 };
