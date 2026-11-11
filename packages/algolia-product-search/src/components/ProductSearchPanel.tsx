@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
 	Configure,
 	Hits,
@@ -6,18 +6,15 @@ import {
 	Pagination,
 	SearchBox,
 	SortBy,
-	useCurrentRefinements,
-	useHits,
-	useInstantSearch,
 } from "react-instantsearch";
 import { LIMITS } from "../lib/config";
 import type { PluginOptions } from "../lib/options";
-import type { AlgoliaHit, PluginContent, SelectedProduct } from "../lib/types";
+import type { PluginContent, SelectedProduct } from "../lib/types";
 import {
 	createSearchClient,
 	dedupeProducts,
 	getDefault,
-	getLocalizedValue,
+	getProductsToAdd,
 	getSortItems,
 	resolveIndexName,
 } from "../lib/utils";
@@ -27,51 +24,8 @@ import { StoreSelector } from "./StoreSelector";
 import "./ProductSearchPanel.css";
 import { Button, Tooltip, TooltipTrigger } from "react-aria-components";
 import { NoResultsBoundary } from "./NoResultsBoundary";
+import { ResultsHeader } from "./ResultsHeader";
 import { SelectionContext } from "./SelectionContext";
-
-type CategoryAutoSelectProps = {
-	onCategorySelect: (products: SelectedProduct[]) => void;
-};
-
-const CategoryAutoSelect = ({ onCategorySelect }: CategoryAutoSelectProps) => {
-	const { items: hits } = useHits<AlgoliaHit>();
-	const { items: refinements } = useCurrentRefinements();
-	const { status, results } = useInstantSearch();
-
-	const categoryRefinement = refinements.find((r) =>
-		r.attribute.startsWith("hierarchicalCategories"),
-	);
-	const categoryValue =
-		categoryRefinement?.refinements[0]?.value !== undefined
-			? String(categoryRefinement.refinements[0].value)
-			: undefined;
-
-	const autoSelectKey =
-		categoryValue === undefined
-			? undefined
-			: `${results.index}::${categoryValue}`;
-
-	const lastAutoSelectedRef = useRef<string | undefined>(undefined);
-
-	useEffect(() => {
-		if (autoSelectKey === undefined) {
-			lastAutoSelectedRef.current = undefined;
-			return;
-		}
-
-		if (status === "idle" && autoSelectKey !== lastAutoSelectedRef.current) {
-			lastAutoSelectedRef.current = autoSelectKey;
-			const products = hits.slice(0, LIMITS.maxProducts).map((hit) => ({
-				objectID: hit.objectID,
-				name: getLocalizedValue(hit.name),
-				image: typeof hit.image === "string" ? hit.image : "",
-			}));
-			onCategorySelect(products);
-		}
-	}, [status, autoSelectKey, hits, onCategorySelect]);
-
-	return null;
-};
 
 type Props = {
 	content: PluginContent;
@@ -93,10 +47,6 @@ export const ProductSearchPanel = ({
 	);
 	const [selected, setSelected] = useState<SelectedProduct[]>(content.products);
 
-	const handleCategorySelect = useCallback((products: SelectedProduct[]) => {
-		setSelected(products);
-	}, []);
-
 	const searchClient = useMemo(
 		() => createSearchClient(options.algoliaAppId, options.algoliaSearchApiKey),
 		[options.algoliaAppId, options.algoliaSearchApiKey],
@@ -110,7 +60,8 @@ export const ProductSearchPanel = ({
 	const indexName = resolveIndexName(getDefault(options.sorts), storeKey);
 
 	const selectedIds = new Set(selected.map((p) => p.objectID));
-	const isAtLimit = selected.length >= LIMITS.maxProducts;
+	const remaining = LIMITS.maxProducts - selected.length;
+	const isAtLimit = remaining <= 0;
 
 	const toggleProduct = useCallback((product: SelectedProduct) => {
 		setSelected((prev) => {
@@ -122,6 +73,17 @@ export const ProductSearchPanel = ({
 			}
 			return [...prev, product];
 		});
+	}, []);
+
+	const addProducts = useCallback((products: SelectedProduct[]) => {
+		setSelected((prev) => [
+			...prev,
+			...getProductsToAdd(
+				products,
+				new Set(prev.map((p) => p.objectID)),
+				LIMITS.maxProducts - prev.length,
+			),
+		]);
 	}, []);
 
 	const handleConfirm = () => {
@@ -140,7 +102,6 @@ export const ProductSearchPanel = ({
 				key={storeKey}
 			>
 				<Configure hitsPerPage={LIMITS.maxProducts} />
-				<CategoryAutoSelect onCategorySelect={handleCategorySelect} />
 
 				<div className="search-panel__toolbar">
 					<div className="toolbar-group">
@@ -168,7 +129,13 @@ export const ProductSearchPanel = ({
 
 					<main className="search-panel__results">
 						<SelectionContext.Provider
-							value={{ selectedIds, isAtLimit, toggleProduct }}
+							value={{
+								selectedIds,
+								isAtLimit,
+								remaining,
+								toggleProduct,
+								addProducts,
+							}}
 						>
 							<NoResultsBoundary
 								fallback={
@@ -178,6 +145,7 @@ export const ProductSearchPanel = ({
 									</div>
 								}
 							>
+								<ResultsHeader />
 								<Hits hitComponent={HitComponent} />
 								<Pagination />
 							</NoResultsBoundary>

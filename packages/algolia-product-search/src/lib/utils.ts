@@ -1,6 +1,6 @@
 import { liteClient as algoliasearch } from "algoliasearch/lite";
 import type { SortConfig } from "./options";
-import type { PluginContent, SelectedProduct } from "./types";
+import type { AlgoliaHit, PluginContent, SelectedProduct } from "./types";
 
 export const createSearchClient = (appId: string, apiKey: string) =>
 	algoliasearch(appId, apiKey);
@@ -56,6 +56,24 @@ export function dedupeProducts(products: SelectedProduct[]): SelectedProduct[] {
 
 		return true;
 	});
+}
+
+export const hitToProduct = (hit: AlgoliaHit): SelectedProduct => ({
+	objectID: hit.objectID,
+	name: getLocalizedValue(hit.name),
+	image: typeof hit.image === "string" ? hit.image : "",
+});
+
+export function getProductsToAdd(
+	pageProducts: SelectedProduct[],
+	selectedIds: Set<string>,
+	remaining: number,
+): SelectedProduct[] {
+	const unselected = pageProducts.filter(
+		(product) => !selectedIds.has(product.objectID),
+	);
+
+	return unselected.slice(0, Math.max(remaining, 0));
 }
 
 export function isValidPluginContent(
